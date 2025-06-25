@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web3 工具連接主頁</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#1E40AF',
+                        accent: '#60A5FA',
+                    },
+                    fontFamily: {
+                        sans: ['Noto Sans TC', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .bg-gradient-blue {
+                background: linear-gradient(135deg, #3B82F6 0%, #1E40AF 100%);
+            }
+            .card-shadow {
+                box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.1), 0 8px 10px -6px rgba(59, 130, 246, 0.1);
+            }
+            .btn-hover {
+                transition: all 0.3s ease;
+            }
+            .btn-hover:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);
+            }
+        }
+    </style>
+</head>
+<body class="font-sans bg-gray-50 min-h-screen flex flex-col">
+    <!-- 導航欄 -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <i class="fa fa-shield text-primary text-2xl mr-3"></i>
+                    <span class="text-xl font-semibold text-gray-900">YamiWeb3</span>
+                </div>
+                <div class="flex items-center">
+                    <span id="login-status" class="hidden text-sm text-green-600 mr-4">
+                        <i class="fa fa-check-circle"></i> 已登入
+                    </span>
+                    <button id="logout-btn" class="hidden px-4 py-2 rounded-md text-sm font-medium text-primary border border-primary hover:bg-primary/5 transition-all">
+                        登出
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主內容區 -->
+    <main class="flex-grow flex items-center justify-center p-4">
+        <!-- 密碼驗證卡片 -->
+        <div id="password-card" class="w-full max-w-md bg-white rounded-xl p-8 shadow-lg transform transition-all duration-300 card-shadow">
+            <div class="text-center mb-6">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
+                    <i class="fa fa-lock text-primary text-2xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-900">需要身份驗證</h2>
+                <p class="mt-2 text-sm text-gray-500">請輸入訪問密碼以繼續</p>
+            </div>
+            
+            <form id="password-form" class="space-y-4">
+                <div class="space-y-2">
+                    <label for="password" class="block text-sm font-medium text-gray-700">訪問密碼</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                            <i class="fa fa-key"></i>
+                        </span>
+                        <input type="password" id="password" name="password" 
+                            class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all"
+                            placeholder="請輸入密碼" required>
+                        <button type="button" id="toggle-password" class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700">
+                            <i class="fa fa-eye-slash"></i>
+                        </button>
+                    </div>
+                    <p id="error-message" class="hidden text-sm text-red-500 mt-1">
+                        <i class="fa fa-exclamation-circle"></i> 密碼錯誤，請重試
+                    </p>
+                </div>
+                
+                <div>
+                    <button type="submit" class="w-full bg-primary hover:bg-secondary text-white py-3 px-4 rounded-lg font-medium btn-hover flex items-center justify-center">
+                        <i class="fa fa-unlock-alt mr-2"></i> 驗證並訪問
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- 工具訪問卡片 (初始隱藏) -->
+        <div id="tool-card" class="hidden w-full max-w-3xl bg-white rounded-xl p-8 shadow-lg transform transition-all duration-300 card-shadow">
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 mb-4">
+                    <i class="fa fa-check text-green-600 text-2xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-900">驗證成功</h2>
+                <p class="mt-2 text-sm text-gray-500">歡迎回來，您現在可以訪問我們的 Web3 工具集</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- 工具卡片 1 - Etherscan (區塊鏈瀏覽器) -->
+                <a href="https://etherscan.io/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                            <i class="fa fa-link text-primary text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">區塊鏈瀏覽器</h3>
+                            <p class="mt-1 text-sm text-gray-500">瀏覽和查詢以太坊區塊鏈上的交易</p>
+                        </div>
+                    </div>
+                </a>
+                
+                <!-- 工具卡片 2 - MetaMask (錢包管理) -->
+                <a href="https://metamask.io/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                            <i class="fa fa-shield text-primary text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">錢包管理</h3>
+                            <p class="mt-1 text-sm text-gray-500">安全管理您的加密貨幣錢包</p>
+                        </div>
+                    </div>
+                </a>
+                
+                <!-- 工具卡片 3 - Uniswap (代幣交換) -->
+                <a href="https://app.uniswap.org/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                            <i class="fa fa-exchange text-primary text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">代幣交換</h3>
+                            <p class="mt-1 text-sm text-gray-500">在以太坊上交換各種ERC-20代幣</p>
+                        </div>
+                    </div>
+                </a>
+                
+                <!-- 工具卡片 4 - Gas Now (Gas價格查詢) -->
+                <a href="https://www.gasnow.org/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                            <i class="fa fa-calculator text-primary text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">Gas 價格查詢</h3>
+                            <p class="mt-1 text-sm text-gray-500">實時查詢以太坊網絡Gas價格</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- 頁腳 -->
+    <footer class="bg-white border-t border-gray-200 py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p class="text-center text-sm text-gray-500">
+                &copy; 2025 YamiWeb3. 保留所有權利。
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // 頁面加載時檢查是否已登入
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuthentication();
+            
+            // 密碼表單提交事件
+            document.getElementById('password-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                verifyPassword();
+            });
+            
+            // 切換密碼可見性
+            document.getElementById('toggle-password').addEventListener('click', function() {
+                const passwordInput = document.getElementById('password');
+                const icon = this.querySelector('i');
+                
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                } else {
+                    passwordInput.type = 'password';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                }
+            });
+            
+            // 登出
+            document.getElementById('logout-btn').addEventListener('click', function() {
+                localStorage.removeItem('authToken');
+                checkAuthentication();
+            });
+        });
+        
+        // 驗證密碼
+        function verifyPassword() {
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('error-message');
+            
+            // 密碼驗證邏輯（這裡使用預設密碼 Yami6666）
+            if (password === 'Yami6666') {
+                // 驗證成功，生成並存儲令牌
+                localStorage.setItem('authToken', 'valid_token_' + Date.now());
+                
+                // 隱藏密碼卡片，顯示工具卡片
+                document.getElementById('password-card').classList.add('hidden');
+                document.getElementById('tool-card').classList.remove('hidden');
+                
+                // 顯示登入狀態和登出按鈕
+                document.getElementById('login-status').classList.remove('hidden');
+                document.getElementById('logout-btn').classList.remove('hidden');
+                
+                // 添加成功動畫
+                const toolCard = document.getElementById('tool-card');
+                toolCard.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => {
+                    toolCard.classList.remove('scale-95', 'opacity-0');
+                }, 10);
+                
+                // 清空密碼輸入框
+                document.getElementById('password').value = '';
+                
+                // 顯示成功通知
+                showNotification('驗證成功！正在加載工具...', 'success');
+            } else {
+                // 驗證失敗，顯示錯誤消息
+                errorMessage.classList.remove('hidden');
+                
+                // 添加錯誤動畫
+                const passwordInput = document.getElementById('password');
+                passwordInput.classList.add('border-red-500', 'animate-shake');
+                
+                setTimeout(() => {
+                    passwordInput.classList.remove('border-red-500', 'animate-shake');
+                }, 500);
+                
+                // 3秒後隱藏錯誤消息
+                setTimeout(() => {
+                    errorMessage.classList.add('hidden');
+                }, 3000);
+            }
+        }
+        
+        // 檢查是否已認證
+        function checkAuthentication() {
+            const authToken = localStorage.getItem('authToken');
+            
+            if (authToken && authToken.startsWith('valid_token_')) {
+                // 已認證，顯示工具卡片
+                document.getElementById('password-card').classList.add('hidden');
+                document.getElementById('tool-card').classList.remove('hidden');
+                document.getElementById('login-status').classList.remove('hidden');
+                document.getElementById('logout-btn').classList.remove('hidden');
+            } else {
+                // 未認證，顯示密碼卡片
+                document.getElementById('password-card').classList.remove('hidden');
+                document.getElementById('tool-card').classList.add('hidden');
+                document.getElementById('login-status').classList.add('hidden');
+                document.getElementById('logout-btn').classList.add('hidden');
+            }
+        }
+        
+        // 顯示通知
+        function showNotification(message, type = 'info') {
+            // 創建通知元素
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg transform transition-all duration-300 z-50 ${
+                type === 'success' ? 'bg-green-500 text-white' : 'bg-blue-500 text-white'
+            }`;
+            notification.textContent = message;
+            
+            // 添加進入動畫
+            notification.style.transform = 'translateX(100%)';
+            document.body.appendChild(notification);
+            
+            // 觸發重排後應用動畫
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 10);
+            
+            // 3秒後移除通知
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+        
+        // 添加動畫樣式
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+                20%, 40%, 60%, 80% { transform: translateX(5px); }
+            }
+            .animate-shake {
+                animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
