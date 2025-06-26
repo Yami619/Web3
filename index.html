@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web3 工具連接主頁</title>
+    <title>YamiCryptoTool - 加密貨幣工具集</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -51,7 +51,7 @@
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
                     <i class="fa fa-shield text-primary text-2xl mr-3"></i>
-                    <span class="text-xl font-semibold text-gray-900">YamiWeb3</span>
+                    <span class="text-xl font-semibold text-gray-900">YamiCryptoTool</span>
                 </div>
                 <div class="flex items-center">
                     <span id="login-status" class="hidden text-sm text-green-600 mr-4">
@@ -111,58 +111,45 @@
                     <i class="fa fa-check text-green-600 text-2xl"></i>
                 </div>
                 <h2 class="text-2xl font-bold text-gray-900">驗證成功</h2>
-                <p class="mt-2 text-sm text-gray-500">歡迎回來，您現在可以訪問我們的 Web3 工具集</p>
+                <p class="mt-2 text-sm text-gray-500">歡迎回來，您現在可以訪問我們的加密貨幣工具集</p>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- 工具卡片 1 - Etherscan (區塊鏈瀏覽器) -->
-                <a href="https://etherscan.io/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+                <!-- 工具卡片 1 - Pionex -->
+                <a href="https://www.pionex.com/zh-TW/signUp?r=dzXYHJUV" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
                     <div class="flex items-start">
                         <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
-                            <i class="fa fa-link text-primary text-xl"></i>
+                            <i class="fa fa-bolt text-primary text-xl"></i>
                         </div>
                         <div class="ml-4">
-                            <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">區塊鏈瀏覽器</h3>
-                            <p class="mt-1 text-sm text-gray-500">瀏覽和查詢以太坊區塊鏈上的交易</p>
+                            <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">Pionex 派網</h3>
+                            <p class="mt-1 text-sm text-gray-500">全球領先的交易機器人平臺</p>
                         </div>
                     </div>
                 </a>
                 
-                <!-- 工具卡片 2 - MetaMask (錢包管理) -->
-                <a href="https://metamask.io/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+                <!-- 工具卡片 2 - Binance -->
+                <a href="https://www.binance.com/activity/referral-entry/CPA?ref=CPA_00Z3UF1UXO&utm_source=electron" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
                     <div class="flex items-start">
                         <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
-                            <i class="fa fa-shield text-primary text-xl"></i>
+                            <i class="fa fa-building text-primary text-xl"></i>
                         </div>
                         <div class="ml-4">
-                            <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">錢包管理</h3>
-                            <p class="mt-1 text-sm text-gray-500">安全管理您的加密貨幣錢包</p>
+                            <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">Binance 幣安</h3>
+                            <p class="mt-1 text-sm text-gray-500">全球最大知名龍頭交易所</p>
                         </div>
                     </div>
                 </a>
                 
-                <!-- 工具卡片 3 - Uniswap (代幣交換) -->
-                <a href="https://app.uniswap.org/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+                <!-- 工具卡片 3 - HTX (火幣) -->
+                <a href="https://www.htx.com.ve/invite/zh-hk/1h?invite_code=qwkgc223" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
                     <div class="flex items-start">
                         <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
-                            <i class="fa fa-exchange text-primary text-xl"></i>
+                            <i class="fa fa-fire text-primary text-xl"></i>
                         </div>
                         <div class="ml-4">
-                            <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">代幣交換</h3>
-                            <p class="mt-1 text-sm text-gray-500">在以太坊上交換各種ERC-20代幣</p>
-                        </div>
-                    </div>
-                </a>
-                
-                <!-- 工具卡片 4 - Gas Now (Gas價格查詢) -->
-                <a href="https://www.gasnow.org/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
-                    <div class="flex items-start">
-                        <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
-                            <i class="fa fa-calculator text-primary text-xl"></i>
-                        </div>
-                        <div class="ml-4">
-                            <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">Gas 價格查詢</h3>
-                            <p class="mt-1 text-sm text-gray-500">實時查詢以太坊網絡Gas價格</p>
+                            <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">HTX 火幣</h3>
+                            <p class="mt-1 text-sm text-gray-500">老牌交易所安全穩定</p>
                         </div>
                     </div>
                 </a>
@@ -174,7 +161,7 @@
     <footer class="bg-white border-t border-gray-200 py-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <p class="text-center text-sm text-gray-500">
-                &copy; 2025 YamiWeb3. 保留所有權利。
+                &copy; 2025 YamiCryptoTool. 保留所有權利。
             </p>
         </div>
     </footer>
