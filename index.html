@@ -1,112 +1,531 @@
-<!-- Web3類別 - 新增工具 -->
-<div class="tool-item" data-category="web3">
-    <a href="https://www.ens.domains/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
-        <div class="flex items-start">
-            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
-                <i class="fa fa-globe text-primary text-xl"></i>
-            </div>
-            <div class="ml-4">
-                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">ENS</h3>
-                <p class="mt-1 text-sm text-gray-500">以太坊名稱服務，將複雜地址轉換為易記域名</p>
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YamiCryptoTool - 加密貨幣工具集</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#1E40AF',
+                        accent: '#60A5FA',
+                        success: '#10B981',
+                        warning: '#F59E0B',
+                        danger: '#EF4444',
+                    },
+                    fontFamily: {
+                        sans: ['Noto Sans TC', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .bg-gradient-blue {
+                background: linear-gradient(135deg, #3B82F6 0%, #1E40AF 100%);
+            }
+            .card-shadow {
+                box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.1), 0 8px 10px -6px rgba(59, 130, 246, 0.1);
+            }
+            .btn-hover {
+                transition: all 0.3s ease;
+            }
+            .btn-hover:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);
+            }
+            .nav-tab {
+                @apply px-4 py-2 rounded-t-lg text-sm font-medium transition-all;
+            }
+            .nav-tab.active {
+                @apply bg-white text-primary border-l border-t border-r border-gray-200;
+            }
+            .nav-tab:not(.active) {
+                @apply bg-gray-100 text-gray-500 hover:bg-gray-200;
+            }
+            .partner-badge {
+                @apply absolute top-3 right-3 bg-success text-white text-xs px-2 py-1 rounded-full;
+            }
+        }
+    </style>
+</head>
+<body class="font-sans bg-gray-50 min-h-screen flex flex-col">
+    <!-- 導航欄 -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <i class="fa fa-shield text-primary text-2xl mr-3"></i>
+                    <span class="text-xl font-semibold text-gray-900">YamiCryptoTool</span>
+                </div>
+                <div class="flex items-center">
+                    <span id="login-status" class="hidden text-sm text-green-600 mr-4">
+                        <i class="fa fa-check-circle"></i> 已登入
+                    </span>
+                    <button id="logout-btn" class="hidden px-4 py-2 rounded-md text-sm font-medium text-primary border border-primary hover:bg-primary/5 transition-all">
+                        登出
+                    </button>
+                </div>
             </div>
         </div>
-    </a>
-</div>
+    </nav>
 
-<div class="tool-item" data-category="web3">
-    <a href="https://alchemy.com/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
-        <div class="flex items-start">
-            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
-                <i class="fa fa-rocket text-primary text-xl"></i>
+    <!-- 主內容區 -->
+    <main class="flex-grow flex items-center justify-center p-4">
+        <!-- 密碼驗證卡片 -->
+        <div id="password-card" class="w-full max-w-md bg-white rounded-xl p-8 shadow-lg transform transition-all duration-300 card-shadow">
+            <div class="text-center mb-6">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
+                    <i class="fa fa-lock text-primary text-2xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-900">需要身份驗證</h2>
+                <p class="mt-2 text-sm text-gray-500">請輸入訪問密碼以繼續</p>
             </div>
-            <div class="ml-4">
-                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">Alchemy</h3>
-                <p class="mt-1 text-sm text-gray-500">Web3開發平臺，提供API和基礎設施服務</p>
-            </div>
+            
+            <form id="password-form" class="space-y-4">
+                <div class="space-y-2">
+                    <label for="password" class="block text-sm font-medium text-gray-700">訪問密碼</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                            <i class="fa fa-key"></i>
+                        </span>
+                        <input type="password" id="password" name="password" 
+                            class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all"
+                            placeholder="請輸入密碼" required>
+                        <button type="button" id="toggle-password" class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700">
+                            <i class="fa fa-eye-slash"></i>
+                        </button>
+                    </div>
+                    <p id="error-message" class="hidden text-sm text-red-500 mt-1">
+                        <i class="fa fa-exclamation-circle"></i> 密碼錯誤，請重試
+                    </p>
+                </div>
+                
+                <div>
+                    <button type="submit" class="w-full bg-primary hover:bg-secondary text-white py-3 px-4 rounded-lg font-medium btn-hover flex items-center justify-center">
+                        <i class="fa fa-unlock-alt mr-2"></i> 驗證並訪問
+                    </button>
+                </div>
+            </form>
         </div>
-    </a>
-</div>
 
-<div class="tool-item" data-category="web3">
-    <a href="https://hardhat.org/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
-        <div class="flex items-start">
-            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
-                <i class="fa fa-hammer text-primary text-xl"></i>
+        <!-- 工具訪問卡片 (初始隱藏) -->
+        <div id="tool-card" class="hidden w-full max-w-5xl bg-white rounded-xl p-8 shadow-lg transform transition-all duration-300 card-shadow">
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 mb-4">
+                    <i class="fa fa-check text-green-600 text-2xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-900">驗證成功</h2>
+                <p class="mt-2 text-sm text-gray-500">歡迎回來，您現在可以訪問我們的加密貨幣工具集</p>
             </div>
-            <div class="ml-4">
-                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">Hardhat</h3>
-                <p class="mt-1 text-sm text-gray-500">以太坊智能合約開發和測試框架</p>
+            
+            <!-- 分類導航 -->
+            <div class="mb-6 border-b border-gray-200">
+                <div class="flex flex-wrap -mb-px">
+                    <button class="nav-tab active" data-category="all">全部工具</button>
+                    <button class="nav-tab" data-category="exchange">交易所</button>
+                    <button class="nav-tab" data-category="wallet">錢包</button>
+                    <button class="nav-tab" data-category="analytics">市場分析</button>
+                    <button class="nav-tab" data-category="web3">Web3工具</button>
+                    <button class="nav-tab" data-category="block-explorer">區塊瀏覽器</button>
+                </div>
             </div>
-        </div>
-    </a>
-</div>
-
-<div class="tool-item" data-category="web3">
-    <a href="https://www.thegraph.com/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
-        <div class="flex items-start">
-            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
-                <i class="fa fa-search text-primary text-xl"></i>
+            
+            <!-- 合作交易所專區 -->
+            <div class="mb-8">
+                <div class="flex items-center mb-4">
+                    <div class="flex-shrink-0 bg-success/10 p-2 rounded-lg">
+                        <i class="fa fa-handshake-o text-success text-xl"></i>
+                    </div>
+                    <h3 class="ml-3 text-xl font-bold text-gray-900">合作交易所</h3>
+                    <div class="ml-2 text-sm text-success bg-success/10 px-2 py-1 rounded-full">
+                        專屬優惠
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 md:grid-cols-3 gap-6">
+                    <!-- 合作交易所卡片 1 - Pionex -->
+                    <a href="https://www.pionex.com/zh-TW/signUp?r=dzXYHJUV" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300 relative">
+                        <div class="partner-badge">合作夥伴</div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                                <i class="fa fa-bolt text-primary text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">Pionex 派網</h3>
+                                <p class="mt-1 text-sm text-gray-500">全球領先的交易機器人平臺</p>
+                                <div class="mt-3 text-xs text-success bg-success/10 inline-block px-2 py-1 rounded-full">
+                                    <i class="fa fa-tag mr-1"></i> 新用戶享10%返佣
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <!-- 合作交易所卡片 2 - Binance -->
+                    <a href="https://www.binance.com/activity/referral-entry/CPA?ref=CPA_00Z3UF1UXO&utm_source=electron" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300 relative">
+                        <div class="partner-badge">合作夥伴</div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                                <i class="fa fa-building text-primary text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">Binance 幣安</h3>
+                                <p class="mt-1 text-sm text-gray-500">全球最大知名龍頭交易所</p>
+                                <div class="mt-3 text-xs text-success bg-success/10 inline-block px-2 py-1 rounded-full">
+                                    <i class="fa fa-tag mr-1"></i> 交易手續費7折
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <!-- 合作交易所卡片 3 - HTX -->
+                    <a href="https://www.htx.com.ve/invite/zh-hk/1h?invite_code=qwkgc223" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300 relative">
+                        <div class="partner-badge">合作夥伴</div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                                <i class="fa fa-fire text-primary text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">HTX 火幣</h3>
+                                <p class="mt-1 text-sm text-gray-500">老牌交易所安全穩定</p>
+                                <div class="mt-3 text-xs text-success bg-success/10 inline-block px-2 py-1 rounded-full">
+                                    <i class="fa fa-tag mr-1"></i> 注冊送USDT
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
             </div>
-            <div class="ml-4">
-                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">The Graph</h3>
-                <p class="mt-1 text-sm text-gray-500">Web3索引協議，簡化區塊鏈數據檢索</p>
-            </div>
-        </div>
-    </a>
-</div>
-
-<div class="tool-item" data-category="web3">
-    <a href="https://ipfs.tech/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
-        <div class="flex items-start">
-            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
-                <i class="fa fa-database text-primary text-xl"></i>
-            </div>
-            <div class="ml-4">
-                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">IPFS</h3>
-                <p class="mt-1 text-sm text-gray-500">分布式存儲協議，實現去中心化文件存儲</p>
-            </div>
-        </div>
-    </a>
-</div>
-
-<div class="tool-item" data-category="web3">
-    <a href="https://chain.link/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
-        <div class="flex items-start">
-            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
-                <i class="fa fa-link text-primary text-xl"></i>
-            </div>
-            <div class="ml-4">
-                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">Chainlink</h3>
-                <p class="mt-1 text-sm text-gray-500">區塊鏈預言機網絡，連接智能合約與現實數據</p>
-            </div>
-        </div>
-    </a>
-</div>
-
-<div class="tool-item" data-category="web3">
-    <a href="https://www.thirdweb.com/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
-        <div class="flex items-start">
-            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
-                <i class="fa fa-cubes text-primary text-xl"></i>
-            </div>
-            <div class="ml-4">
-                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">ThirdWeb</h3>
-                <p class="mt-1 text-sm text-gray-500">Web3開發工具包，簡化智能合約部署與交互</p>
-            </div>
-        </div>
-    </a>
-</div>
-
-<div class="tool-item" data-category="web3">
-    <a href="https://www.covalent.com/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
-        <div class="flex items-start">
-            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
-                <i class="fa fa-chart-line text-primary text-xl"></i>
-            </div>
-            <div class="ml-4">
-                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">Covalent</h3>
-                <p class="mt-1 text-sm text-gray-500">多鏈數據API，統一訪問不同區塊鏈數據</p>
-            </div>
-        </div>
-    </a>
-</div>
+            
+            <!-- 所有工具列表 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 md:grid-cols-3 gap-6">
+                <!-- 錢包類別 - SafePal -->
+                <div class="tool-item" data-category="wallet">
+                    <a href="https://www.safepal.com/zh-tc/bank" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                                <i class="fa fa-shield text-primary text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">SafePal</h3>
+                                <p class="mt-1 text-sm text-gray-500">安全的多鏈加密錢包</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <!-- 市場分析類別 -->
+                <div class="tool-item" data-category="analytics">
+                    <a href="https://coinmarketcap.com/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                                <i class="fa fa-line-chart text-primary text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">CoinMarketCap</h3>
+                                <p class="mt-1 text-sm text-gray-500">加密貨幣市場數據</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <!-- 市場分析類別 -->
+                <div class="tool-item" data-category="analytics">
+                    <a href="https://www.coingecko.com/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                                <i class="fa fa-pie-chart text-primary text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">CoinGecko</h3>
+                                <p class="mt-1 text-sm text-gray-500">加密貨幣數據追蹤</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <!-- 市場分析類別 - TradingView -->
+                <div class="tool-item" data-category="analytics">
+                    <a href="https://tw.tradingview.com/pricing/?share_your_love=handsomeyami" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                                <i class="fa fa-bar-chart text-primary text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">TradingView</h3>
+                                <p class="mt-1 text-sm text-gray-500">專業的金融市場分析工具</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <!-- Web3類別 - 新增工具 -->
+                <div class="tool-item" data-category="web3">
+                    <a href="https://www.ens.domains/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                                <i class="fa fa-globe text-primary text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">ENS</h3>
+                                <p class="mt-1 text-sm text-gray-500">以太坊名稱服務，將複雜地址轉換為易記域名</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="tool-item" data-category="web3">
+                    <a href="https://alchemy.com/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                                <i class="fa fa-rocket text-primary text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">Alchemy</h3>
+                                <p class="mt-1 text-sm text-gray-500">Web3開發平臺，提供API和基礎設施服務</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="tool-item" data-category="web3">
+                    <a href="https://hardhat.org/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                                <i class="fa fa-hammer text-primary text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">Hardhat</h3>
+                                <p class="mt-1 text-sm text-gray-500">以太坊智能合約開發和測試框架</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="tool-item" data-category="web3">
+                    <a href="https://www.thegraph.com/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                                <i class="fa fa-search text-primary text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">The Graph</h3>
+                                <p class="mt-1 text-sm text-gray-500">Web3索引協議，簡化區塊鏈數據檢索</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="tool-item" data-category="web3">
+                    <a href="https://ipfs.tech/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                                <i class="fa fa-database text-primary text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">IPFS</h3>
+                                <p class="mt-1 text-sm text-gray-500">分布式存儲協議，實現去中心化文件存儲</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="tool-item" data-category="web3">
+                    <a href="https://chain.link/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                                <i class="fa fa-link text-primary text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">Chainlink</h3>
+                                <p class="mt-1 text-sm text-gray-500">區塊鏈預言機網絡，連接智能合約與現實數據</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="tool-item" data-category="web3">
+                    <a href="https://www.thirdweb.com/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                                <i class="fa fa-cubes text-primary text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">ThirdWeb</h3>
+                                <p class="mt-1 text-sm text-gray-500">Web3開發工具包，簡化智能合約部署與交互</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="tool-item" data-category="web3">
+                    <a href="https://www.covalent.com/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                                <i class="fa fa-chart-line text-primary text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">Covalent</h3>
+                                <p class="mt-1 text-sm text-gray-500">多鏈數據API，統一訪問不同區塊鏈數據</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <!-- Web3類別 - 原有工具 -->
+                <div class="tool-item" data-category="web3">
+                    <a href="https://metamask.io/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                                <i class="fa fa-plug text-primary text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">MetaMask</h3>
+                                <p class="mt-1 text-sm text-gray-500">Web3網頁瀏覽器擴展</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="tool-item" data-category="web3">
+                    <a href="https://opensea.io/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                                <i class="fa fa-paint-brush text-primary text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">OpenSea</h3>
+                                <p class="mt-1 text-sm text-gray-500">最大的NFT市場平臺</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="tool-item" data-category="web3">
+                    <a href="https://infura.io/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                                <i class="fa fa-server text-primary text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">Infura</h3>
+                                <p class="mt-1 text-sm text-gray-500">Web3基礎設施提供商</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="tool-item" data-category="web3">
+                    <a href="https://followin.io/referral/WDwMrp" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                                <i class="fa fa-user-plus text-primary text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">Followin</h3>
+                                <p class="mt-1 text-sm text-gray-500">Web3社交與賺取平臺</p>
+                                <div class="mt-3 text-xs text-success bg-success/10 inline-block px-2 py-1 rounded-full">
+                                    <i class="fa fa-tag mr-1"></i> 推薦鏈接
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="tool-item" data-category="web3">
+                    <a href="https://debank.com/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                                <i class="fa fa-cubes text-primary text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">Debank</h3>
+                                <p class="mt-1 text-sm text-gray-500">Web3資產與DeFi投資組合管理</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <!-- 區塊瀏覽器類別 -->
+                <div class="tool-item" data-category="block-explorer">
+                    <a href="https://bscscan.com/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                                <i class="fa fa-chain text-primary text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">BSC瀏覽器</h3>
+                                <p class="mt-1 text-sm text-gray-500">幣安智能鏈BSC官方瀏覽器</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="tool-item" data-category="block-explorer">
+                    <a href="https://etherscan.io/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                                <i class="fa fa-chain text-primary text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">ETH瀏覽器</h3>
+                                <p class="mt-1 text-sm text-gray-500">以太坊ETH官方瀏覽器</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="tool-item" data-category="block-explorer">
+                    <a href="https://solscan.io/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                                <i class="fa fa-chain text-primary text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">Sol瀏覽器</h3>
+                                <p class="mt-1 text-sm text-gray-500">Solana生態最知名的瀏覽器</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="tool-item" data-category="block-explorer">
+                    <a href="https://tonviewer.com/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                                <i class="fa fa-chain text-primary text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">Tonviewer瀏覽器</h3>
+                                <p class="mt-1 text-sm text-gray-500">專注於TON鏈的瀏覽器</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="tool-item" data-category="block-explorer">
+                    <a href="https://www.oklink.com/zh-cn" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                                <i class="fa fa-chain text-primary text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">歐科雲鏈OKLink</h3>
+                                <p class="mt-1 text-sm text-gray-500">國內知名的多鏈瀏覽器</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="tool-item" data-category="block-explorer">
+                    <a href="https://blockchair.com/" target="_blank" class="group bg-gray-50
