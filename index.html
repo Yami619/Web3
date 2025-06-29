@@ -2,7 +2,6 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-<meta http-equiv="WWW-Authenticate" content="Basic realm="Restricted Area">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YamiCryptoTool - 加密貨幣工具集</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -16,6 +15,9 @@
                         primary: '#3B82F6',
                         secondary: '#1E40AF',
                         accent: '#60A5FA',
+                        success: '#10B981',
+                        warning: '#F59E0B',
+                        danger: '#EF4444',
                     },
                     fontFamily: {
                         sans: ['Noto Sans TC', 'sans-serif'],
@@ -41,6 +43,18 @@
             .btn-hover:hover {
                 transform: translateY(-2px);
                 box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);
+            }
+            .nav-tab {
+                @apply px-4 py-2 rounded-t-lg text-sm font-medium transition-all;
+            }
+            .nav-tab.active {
+                @apply bg-white text-primary border-l border-t border-r border-gray-200;
+            }
+            .nav-tab:not(.active) {
+                @apply bg-gray-100 text-gray-500 hover:bg-gray-200;
+            }
+            .partner-badge {
+                @apply absolute top-3 right-3 bg-success text-white text-xs px-2 py-1 rounded-full;
             }
         }
     </style>
@@ -106,7 +120,7 @@
         </div>
 
         <!-- 工具訪問卡片 (初始隱藏) -->
-        <div id="tool-card" class="hidden w-full max-w-3xl bg-white rounded-xl p-8 shadow-lg transform transition-all duration-300 card-shadow">
+        <div id="tool-card" class="hidden w-full max-w-5xl bg-white rounded-xl p-8 shadow-lg transform transition-all duration-300 card-shadow">
             <div class="text-center mb-8">
                 <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 mb-4">
                     <i class="fa fa-check text-green-600 text-2xl"></i>
@@ -115,45 +129,173 @@
                 <p class="mt-2 text-sm text-gray-500">歡迎回來，您現在可以訪問我們的加密貨幣工具集</p>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- 工具卡片 1 - Pionex -->
-                <a href="https://www.pionex.com/zh-TW/signUp?r=dzXYHJUV" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
-                    <div class="flex items-start">
-                        <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
-                            <i class="fa fa-bolt text-primary text-xl"></i>
-                        </div>
-                        <div class="ml-4">
-                            <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">Pionex 派網</h3>
-                            <p class="mt-1 text-sm text-gray-500">全球領先的交易機器人平臺</p>
-                        </div>
+            <!-- 分類導航 -->
+            <div class="mb-6 border-b border-gray-200">
+                <div class="flex flex-wrap -mb-px">
+                    <button class="nav-tab active" data-category="all">全部工具</button>
+                    <button class="nav-tab" data-category="exchange">交易所</button>
+                    <button class="nav-tab" data-category="wallet">錢包</button>
+                    <button class="nav-tab" data-category="analytics">市場分析</button>
+                </div>
+            </div>
+            
+            <!-- 合作交易所專區 -->
+            <div class="mb-8">
+                <div class="flex items-center mb-4">
+                    <div class="flex-shrink-0 bg-success/10 p-2 rounded-lg">
+                        <i class="fa fa-handshake-o text-success text-xl"></i>
                     </div>
-                </a>
+                    <h3 class="ml-3 text-xl font-bold text-gray-900">合作交易所</h3>
+                    <div class="ml-2 text-sm text-success bg-success/10 px-2 py-1 rounded-full">
+                        專屬優惠
+                    </div>
+                </div>
                 
-                <!-- 工具卡片 2 - Binance -->
-                <a href="https://www.binance.com/activity/referral-entry/CPA?ref=CPA_00Z3UF1UXO&utm_source=electron" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
-                    <div class="flex items-start">
-                        <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
-                            <i class="fa fa-building text-primary text-xl"></i>
+                <div class="grid grid-cols-1 md:grid-cols-2 md:grid-cols-3 gap-6">
+                    <!-- 合作交易所卡片 1 - Pionex -->
+                    <a href="https://www.pionex.com/zh-TW/signUp?r=dzXYHJUV" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300 relative">
+                        <div class="partner-badge">合作夥伴</div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                                <i class="fa fa-bolt text-primary text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">Pionex 派網</h3>
+                                <p class="mt-1 text-sm text-gray-500">全球領先的交易機器人平臺</p>
+                                <div class="mt-3 text-xs text-success bg-success/10 inline-block px-2 py-1 rounded-full">
+                                    <i class="fa fa-tag mr-1"></i> 新用戶享10%返佣
+                                </div>
+                            </div>
                         </div>
-                        <div class="ml-4">
-                            <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">Binance 幣安</h3>
-                            <p class="mt-1 text-sm text-gray-500">全球最大知名龍頭交易所</p>
+                    </a>
+                    
+                    <!-- 合作交易所卡片 2 - Binance -->
+                    <a href="https://www.binance.com/activity/referral-entry/CPA?ref=CPA_00Z3UF1UXO&utm_source=electron" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300 relative">
+                        <div class="partner-badge">合作夥伴</div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                                <i class="fa fa-building text-primary text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">Binance 幣安</h3>
+                                <p class="mt-1 text-sm text-gray-500">全球最大知名龍頭交易所</p>
+                                <div class="mt-3 text-xs text-success bg-success/10 inline-block px-2 py-1 rounded-full">
+                                    <i class="fa fa-tag mr-1"></i> 交易手續費7折
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </a>
+                    </a>
+                    
+                    <!-- 合作交易所卡片 3 - HTX -->
+                    <a href="https://www.htx.com.ve/invite/zh-hk/1h?invite_code=qwkgc223" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300 relative">
+                        <div class="partner-badge">合作夥伴</div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                                <i class="fa fa-fire text-primary text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">HTX 火幣</h3>
+                                <p class="mt-1 text-sm text-gray-500">老牌交易所安全穩定</p>
+                                <div class="mt-3 text-xs text-success bg-success/10 inline-block px-2 py-1 rounded-full">
+                                    <i class="fa fa-tag mr-1"></i> 注冊送USDT
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- 所有工具列表 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 md:grid-cols-3 gap-6">
+                <!-- 交易所類別 -->
+                <div class="tool-item" data-category="exchange">
+                    <a href="https://www.okex.com/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                                <i class="fa fa-exchange text-primary text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">OKEx</h3>
+                                <p class="mt-1 text-sm text-gray-500">數字資產交易平臺</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
                 
-                <!-- 工具卡片 3 - HTX (火幣) -->
-                <a href="https://www.htx.com.ve/invite/zh-hk/1h?invite_code=qwkgc223" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
-                    <div class="flex items-start">
-                        <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
-                            <i class="fa fa-fire text-primary text-xl"></i>
+                <!-- 錢包類別 -->
+                <div class="tool-item" data-category="wallet">
+                    <a href="https://www.ledger.com/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                                <i class="fa fa-money text-primary text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">Ledger</h3>
+                                <p class="mt-1 text-sm text-gray-500">硬體錢包安全存儲</p>
+                            </div>
                         </div>
-                        <div class="ml-4">
-                            <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">HTX 火幣</h3>
-                            <p class="mt-1 text-sm text-gray-500">老牌交易所安全穩定</p>
+                    </a>
+                </div>
+                
+                <!-- 市場分析類別 -->
+                <div class="tool-item" data-category="analytics">
+                    <a href="https://coinmarketcap.com/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                                <i class="fa fa-line-chart text-primary text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">CoinMarketCap</h3>
+                                <p class="mt-1 text-sm text-gray-500">加密貨幣市場數據</p>
+                            </div>
                         </div>
-                    </div>
-                </a>
+                    </a>
+                </div>
+                
+                <!-- 交易所類別 -->
+                <div class="tool-item" data-category="exchange">
+                    <a href="https://www.bybit.com/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                                <i class="fa fa-btc text-primary text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">Bybit</h3>
+                                <p class="mt-1 text-sm text-gray-500">合約交易平臺</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <!-- 錢包類別 -->
+                <div class="tool-item" data-category="wallet">
+                    <a href="https://trustwallet.com/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                                <i class="fa fa-wallet text-primary text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">Trust Wallet</h3>
+                                <p class="mt-1 text-sm text-gray-500">多鏈去中心化錢包</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <!-- 市場分析類別 -->
+                <div class="tool-item" data-category="analytics">
+                    <a href="https://www.coingecko.com/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
+                                <i class="fa fa-pie-chart text-primary text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">CoinGecko</h3>
+                                <p class="mt-1 text-sm text-gray-500">加密貨幣數據追蹤</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
     </main>
@@ -198,6 +340,23 @@
             document.getElementById('logout-btn').addEventListener('click', function() {
                 localStorage.removeItem('authToken');
                 checkAuthentication();
+            });
+            
+            // 分類導航切換
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // 移除所有選中狀態
+                    document.querySelectorAll('.nav-tab').forEach(t => {
+                        t.classList.remove('active');
+                    });
+                    
+                    // 添加選中狀態
+                    tab.classList.add('active');
+                    
+                    // 顯示對應類別的工具
+                    const category = tab.getAttribute('data-category');
+                    filterTools(category);
+                });
             });
         });
         
@@ -294,6 +453,25 @@
                     document.body.removeChild(notification);
                 }, 300);
             }, 3000);
+        }
+        
+        // 篩選工具
+        function filterTools(category) {
+            const toolItems = document.querySelectorAll('.tool-item');
+            
+            toolItems.forEach(item => {
+                if (category === 'all' || item.getAttribute('data-category') === category) {
+                    item.style.display = 'block';
+                    // 添加顯示動畫
+                    item.style.opacity = '0';
+                    setTimeout(() => {
+                        item.style.opacity = '1';
+                        item.style.transition = 'opacity 0.3s ease';
+                    }, 50);
+                } else {
+                    item.style.display = 'none';
+                }
+            });
         }
         
         // 添加動畫樣式
