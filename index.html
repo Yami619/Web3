@@ -56,6 +56,14 @@
             .partner-badge {
                 @apply absolute top-3 right-3 bg-success text-white text-xs px-2 py-1 rounded-full;
             }
+            .animate-shake {
+                animation: shake 0.5s;
+            }
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+                20%, 40%, 60%, 80% { transform: translateX(5px); }
+            }
         }
     </style>
 </head>
@@ -269,35 +277,7 @@
                     </a>
                 </div>
                 
-                <!-- Web3類別 - 合併後的工具 -->
-                <div class="tool-item" data-category="web3">
-                    <a href="https://etherscan.io/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
-                        <div class="flex items-start">
-                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
-                                <i class="fa fa-search text-primary text-xl"></i>
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">Etherscan</h3>
-                                <p class="mt-1 text-sm text-gray-500">以太坊區塊鏈瀏覽器</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                
-                <div class="tool-item" data-category="web3">
-                    <a href="https://metamask.io/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
-                        <div class="flex items-start">
-                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
-                                <i class="fa fa-plug text-primary text-xl"></i>
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">MetaMask</h3>
-                                <p class="mt-1 text-sm text-gray-500">Web3網頁瀏覽器擴展</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                
+                <!-- Web3類別 -->
                 <div class="tool-item" data-category="web3">
                     <a href="https://opensea.io/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
                         <div class="flex items-start">
@@ -343,7 +323,8 @@
                     </a>
                 </div>
                 
-                <div class="tool-item" data-category="web3">
+                <!-- 工具類別 - Debank -->
+                <div class="tool-item" data-category="tools">
                     <a href="https://debank.com/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
                         <div class="flex items-start">
                             <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
@@ -359,20 +340,6 @@
                 
                 <!-- 區塊瀏覽器類別 -->
                 <div class="tool-item" data-category="block-explorer">
-                    <a href="https://bscscan.com/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
-                        <div class="flex items-start">
-                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
-                                <i class="fa fa-chain text-primary text-xl"></i>
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">BSC瀏覽器</h3>
-                                <p class="mt-1 text-sm text-gray-500">幣安智能鏈BSC官方瀏覽器</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                
-                <div class="tool-item" data-category="block-explorer">
                     <a href="https://etherscan.io/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
                         <div class="flex items-start">
                             <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
@@ -385,337 +352,134 @@
                         </div>
                     </a>
                 </div>
-                
-                <div class="tool-item" data-category="block-explorer">
-                    <a href="https://solscan.io/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
-                        <div class="flex items-start">
-                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
-                                <i class="fa fa-chain text-primary text-xl"></i>
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">Sol瀏覽器</h3>
-                                <p class="mt-1 text-sm text-gray-500">Solana生態最知名的瀏覽器</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                
-                <div class="tool-item" data-category="block-explorer">
-                    <a href="https://tonviewer.com/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
-                        <div class="flex items-start">
-                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
-                                <i class="fa fa-chain text-primary text-xl"></i>
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">Tonviewer瀏覽器</h3>
-                                <p class="mt-1 text-sm text-gray-500">專注於TON鏈的瀏覽器</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                
-                <div class="tool-item" data-category="block-explorer">
-                    <a href="https://www.oklink.com/zh-cn" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
-                        <div class="flex items-start">
-                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
-                                <i class="fa fa-chain text-primary text-xl"></i>
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">歐科雲鏈OKLink</h3>
-                                <p class="mt-1 text-sm text-gray-500">國內知名的多鏈瀏覽器</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                
-                <div class="tool-item" data-category="block-explorer">
-                    <a href="https://blockchair.com/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
-                        <div class="flex items-start">
-                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
-                                <i class="fa fa-chain text-primary text-xl"></i>
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">Blockchair</h3>
-                                <p class="mt-1 text-sm text-gray-500">國外知名的多鏈瀏覽器</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                
-                <div class="tool-item" data-category="block-explorer">
-                    <a href="https://tronscan.org/#/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
-                        <div class="flex items-start">
-                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
-                                <i class="fa fa-chain text-primary text-xl"></i>
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">波場TRON瀏覽器</h3>
-                                <p class="mt-1 text-sm text-gray-500">波場鏈TRON官方瀏覽器</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                
-                <div class="tool-item" data-category="block-explorer">
-                    <a href="https://mempool.space/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
-                        <div class="flex items-start">
-                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
-                                <i class="fa fa-chain text-primary text-xl"></i>
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">Mempool</h3>
-                                <p class="mt-1 text-sm text-gray-500">專注於比特幣BTC鏈的瀏覽器</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                
-                <div class="tool-item" data-category="block-explorer">
-                    <a href="https://basescan.org/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
-                        <div class="flex items-start">
-                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
-                                <i class="fa fa-chain text-primary text-xl"></i>
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">Base鏈瀏覽器</h3>
-                                <p class="mt-1 text-sm text-gray-500">ETH二層網頁Base官方瀏覽器</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                
-                <div class="tool-item" data-category="block-explorer">
-                    <a href="https://arbiscan.io/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
-                        <div class="flex items-start">
-                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
-                                <i class="fa fa-chain text-primary text-xl"></i>
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">Arbitrum瀏覽器</h3>
-                                <p class="mt-1 text-sm text-gray-500">ETH二層網絡Arb官方瀏覽器</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                
-                <div class="tool-item" data-category="block-explorer">
-                    <a href="https://polygonscan.com/" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
-                        <div class="flex items-start">
-                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
-                                <i class="fa fa-chain text-primary text-xl"></i>
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">馬蹄鏈瀏覽器</h3>
-                                <p class="mt-1 text-sm text-gray-500">Polygon馬蹄鏈官方瀏覽器</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                
-                <div class="tool-item" data-category="block-explorer">
-                    <a href="https://filfox.info/en" target="_blank" class="group bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
-                        <div class="flex items-start">
-                            <div class="flex-shrink-0 bg-primary/10 p-3 rounded-lg">
-                                <i class="fa fa-chain text-primary text-xl"></i>
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="text-lg font-medium text-gray-900 group-hover:text-primary transition-colors">飛狐瀏覽器</h3>
-                                <p class="mt-1 text-sm text-gray-500">Filecoin生態知名瀏覽器</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
             </div>
         </div>
     </main>
 
     <!-- 頁腳 -->
-    <footer class="bg-white border-t border-gray-200 py-6">
+    <footer class="bg-white border-t border-gray-200 py-4">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <p class="text-center text-sm text-gray-500">
-                &copy; 2025 YamiCryptoTool. 保留所有權利。
+                © 2023 YamiCryptoTool. 保留所有權利。
             </p>
         </div>
     </footer>
 
     <script>
-        // 頁面加載時檢查是否已登入
+        // 密碼驗證和頁面切換
         document.addEventListener('DOMContentLoaded', function() {
-            checkAuthentication();
+            // 密碼驗證
+            const passwordForm = document.getElementById('password-form');
+            const passwordInput = document.getElementById('password');
+            const errorMessage = document.getElementById('error-message');
+            const passwordCard = document.getElementById('password-card');
+            const toolCard = document.getElementById('tool-card');
+            const loginStatus = document.getElementById('login-status');
+            const logoutBtn = document.getElementById('logout-btn');
             
-            // 密碼表單提交事件
-            document.getElementById('password-form').addEventListener('submit', function(e) {
+            // 默認密碼設置
+            const correctPassword = '123456'; // 請修改為您想要的密碼
+            
+            // 提交表單
+            passwordForm.addEventListener('submit', function(e) {
                 e.preventDefault();
-                verifyPassword();
+                
+                if (passwordInput.value === correctPassword) {
+                    // 驗證成功
+                    errorMessage.classList.add('hidden');
+                    passwordInput.classList.remove('border-red-500');
+                    passwordInput.classList.remove('focus:ring-red-500');
+                    passwordCard.classList.add('opacity-0');
+                    
+                    // 延遲顯示工具卡片以顯示動畫效果
+                    setTimeout(() => {
+                        passwordCard.classList.add('hidden');
+                        toolCard.classList.remove('hidden');
+                        toolCard.classList.add('opacity-100');
+                        loginStatus.classList.remove('hidden');
+                        logoutBtn.classList.remove('hidden');
+                    }, 300);
+                    
+                    // 存儲登錄狀態到localStorage
+                    localStorage.setItem('isLoggedIn', 'true');
+                    
+                    // 重置表單
+                    passwordForm.reset();
+                } else {
+                    // 驗證失敗
+                    errorMessage.classList.remove('hidden');
+                    passwordInput.classList.add('border-red-500');
+                    passwordInput.classList.add('focus:ring-red-500');
+                    
+                    // 添加錯誤動畫
+                    passwordInput.classList.add('animate-shake');
+                    setTimeout(() => {
+                        passwordInput.classList.remove('animate-shake');
+                    }, 500);
+                }
             });
             
             // 切換密碼可見性
-            document.getElementById('toggle-password').addEventListener('click', function() {
-                const passwordInput = document.getElementById('password');
-                const icon = this.querySelector('i');
+            const togglePassword = document.getElementById('toggle-password');
+            togglePassword.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
                 
-                if (passwordInput.type === 'password') {
-                    passwordInput.type = 'text';
-                    icon.classList.remove('fa-eye-slash');
-                    icon.classList.add('fa-eye');
+                // 切換圖標
+                if (type === 'text') {
+                    togglePassword.innerHTML = '<i class="fa fa-eye"></i>';
                 } else {
-                    passwordInput.type = 'password';
-                    icon.classList.remove('fa-eye');
-                    icon.classList.add('fa-eye-slash');
+                    togglePassword.innerHTML = '<i class="fa fa-eye-slash"></i>';
                 }
             });
             
-            // 登出
-            document.getElementById('logout-btn').addEventListener('click', function() {
-                localStorage.removeItem('authToken');
-                checkAuthentication();
+            // 登出功能
+            logoutBtn.addEventListener('click', function() {
+                // 隱藏工具卡片，顯示密碼卡片
+                toolCard.classList.add('hidden');
+                passwordCard.classList.remove('hidden');
+                passwordCard.classList.remove('opacity-0');
+                loginStatus.classList.add('hidden');
+                logoutBtn.classList.add('hidden');
+                
+                // 清除登錄狀態
+                localStorage.removeItem('isLoggedIn');
             });
             
-            // 分類導航切換
-            document.querySelectorAll('.nav-tab').forEach(tab => {
-                tab.addEventListener('click', () => {
-                    // 移除所有選中狀態
-                    document.querySelectorAll('.nav-tab').forEach(t => {
-                        t.classList.remove('active');
+            // 檢查本地存儲中的登錄狀態
+            if (localStorage.getItem('isLoggedIn') === 'true') {
+                passwordCard.classList.add('hidden');
+                toolCard.classList.remove('hidden');
+                loginStatus.classList.remove('hidden');
+                logoutBtn.classList.remove('hidden');
+            }
+            
+            // 工具分類篩選
+            const navTabs = document.querySelectorAll('.nav-tab');
+            const toolItems = document.querySelectorAll('.tool-item');
+            
+            navTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // 移除所有選項卡的active類
+                    navTabs.forEach(t => t.classList.remove('active'));
+                    
+                    // 為當前選項卡添加active類
+                    this.classList.add('active');
+                    
+                    // 獲取要篩選的類別
+                    const category = this.getAttribute('data-category');
+                    
+                    // 顯示所有工具或根據類別篩選
+                    toolItems.forEach(item => {
+                        if (category === 'all' || item.getAttribute('data-category') === category) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
                     });
-                    
-                    // 添加選中狀態
-                    tab.classList.add('active');
-                    
-                    // 顯示對應類別的工具
-                    const category = tab.getAttribute('data-category');
-                    filterTools(category);
                 });
             });
         });
-        
-        // 驗證密碼
-        function verifyPassword() {
-            const password = document.getElementById('password').value;
-            const errorMessage = document.getElementById('error-message');
-            
-            // 密碼驗證邏輯（這裡使用預設密碼 Yami6666）
-            if (password === 'Yami6666') {
-                // 驗證成功，生成並存儲令牌
-                localStorage.setItem('authToken', 'valid_token_' + Date.now());
-                
-                // 隱藏密碼卡片，顯示工具卡片
-                document.getElementById('password-card').classList.add('hidden');
-                document.getElementById('tool-card').classList.remove('hidden');
-                
-                // 顯示登入狀態和登出按鈕
-                document.getElementById('login-status').classList.remove('hidden');
-                document.getElementById('logout-btn').classList.remove('hidden');
-                
-                // 添加成功動畫
-                const toolCard = document.getElementById('tool-card');
-                toolCard.classList.add('scale-95', 'opacity-0');
-                setTimeout(() => {
-                    toolCard.classList.remove('scale-95', 'opacity-0');
-                }, 10);
-                
-                // 清空密碼輸入框
-                document.getElementById('password').value = '';
-                
-                // 顯示成功通知
-                showNotification('驗證成功！正在加載工具...', 'success');
-            } else {
-                // 驗證失敗，顯示錯誤消息
-                errorMessage.classList.remove('hidden');
-                
-                // 添加錯誤動畫
-                const passwordInput = document.getElementById('password');
-                passwordInput.classList.add('border-red-500', 'animate-shake');
-                
-                setTimeout(() => {
-                    passwordInput.classList.remove('border-red-500', 'animate-shake');
-                }, 500);
-                
-                // 3秒後隱藏錯誤消息
-                setTimeout(() => {
-                    errorMessage.classList.add('hidden');
-                }, 3000);
-            }
-        }
-        
-        // 檢查是否已認證
-        function checkAuthentication() {
-            const authToken = localStorage.getItem('authToken');
-            
-            if (authToken && authToken.startsWith('valid_token_')) {
-                // 已認證，顯示工具卡片
-                document.getElementById('password-card').classList.add('hidden');
-                document.getElementById('tool-card').classList.remove('hidden');
-                document.getElementById('login-status').classList.remove('hidden');
-                document.getElementById('logout-btn').classList.remove('hidden');
-            } else {
-                // 未認證，顯示密碼卡片
-                document.getElementById('password-card').classList.remove('hidden');
-                document.getElementById('tool-card').classList.add('hidden');
-                document.getElementById('login-status').classList.add('hidden');
-                document.getElementById('logout-btn').classList.add('hidden');
-            }
-        }
-        
-        // 顯示通知
-        function showNotification(message, type = 'info') {
-            // 創建通知元素
-            const notification = document.createElement('div');
-            notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg transform transition-all duration-300 z-50 ${
-                type === 'success' ? 'bg-green-500 text-white' : 'bg-blue-500 text-white'
-            }`;
-            notification.textContent = message;
-            
-            // 添加進入動畫
-            notification.style.transform = 'translateX(100%)';
-            document.body.appendChild(notification);
-            
-            // 觸發重排後應用動畫
-            setTimeout(() => {
-                notification.style.transform = 'translateX(0)';
-            }, 10);
-            
-            // 3秒後移除通知
-            setTimeout(() => {
-                notification.style.transform = 'translateX(100%)';
-                setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 300);
-            }, 3000);
-        }
-        
-        // 篩選工具
-        function filterTools(category) {
-            const toolItems = document.querySelectorAll('.tool-item');
-            
-            toolItems.forEach(item => {
-                if (category === 'all' || item.getAttribute('data-category') === category) {
-                    item.style.display = 'block';
-                    // 添加顯示動畫
-                    item.style.opacity = '0';
-                    setTimeout(() => {
-                        item.style.opacity = '1';
-                        item.style.transition = 'opacity 0.3s ease';
-                    }, 50);
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-        }
-        
-        // 添加動畫樣式
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes shake {
-                0%, 100% { transform: translateX(0); }
-                10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-                20%, 40%, 60%, 80% { transform: translateX(5px); }
-            }
-            .animate-shake {
-                animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
-            }
-        `;
-        document.head.appendChild(style);
     </script>
 </body>
 </html>
