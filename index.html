@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/deepseek-chat-sdk@1.0.0"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -135,6 +136,23 @@
                 </div>
                 <h2 class="text-2xl font-bold text-gray-900">驗證成功</h2>
                 <p class="mt-2 text-sm text-gray-500">歡迎回來，您現在可以訪問我們的加密貨幣工具集</p>
+            </div>
+            
+            <!-- AI交易助手 -->
+            <div class="mb-8 bg-gray-50 rounded-xl p-6 border border-gray-200">
+                <h2 class="text-xl font-bold text-gray-900 mb-4">
+                    <i class="fa fa-robot text-primary mr-2"></i> AI交易助手
+                </h2>
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <input type="text" id="question" 
+                        class="flex-grow px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all"
+                        placeholder="輸入問題，例：ETH現在該做多嗎？">
+                    <button id="ask-btn" 
+                        class="px-6 py-3 bg-primary hover:bg-secondary text-white rounded-lg font-medium btn-hover flex items-center justify-center whitespace-nowrap">
+                        <i class="fa fa-magic mr-2"></i> 獲取分析
+                    </button>
+                </div>
+                <div id="answer" class="mt-4 p-4 bg-white border border-gray-200 rounded-lg min-h-[100px]"></div>
             </div>
             
             <!-- 分類導航 -->
@@ -562,79 +580,3 @@
                     passwordForm.reset();
                 } else {
                     // 驗證失敗
-                    errorMessage.classList.remove('hidden');
-                    passwordInput.classList.add('border-red-500');
-                    passwordInput.classList.add('focus:ring-red-500');
-                    
-                    // 添加錯誤動畫
-                    passwordInput.classList.add('animate-shake');
-                    setTimeout(() => {
-                        passwordInput.classList.remove('animate-shake');
-                    }, 500);
-                }
-            });
-            
-            // 切換密碼可見性
-            const togglePassword = document.getElementById('toggle-password');
-            togglePassword.addEventListener('click', function() {
-                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                passwordInput.setAttribute('type', type);
-                
-                // 切換圖標
-                if (type === 'text') {
-                    togglePassword.innerHTML = '<i class="fa fa-eye"></i>';
-                } else {
-                    togglePassword.innerHTML = '<i class="fa fa-eye-slash"></i>';
-                }
-            });
-            
-            // 登出功能
-            logoutBtn.addEventListener('click', function() {
-                // 隱藏工具卡片，顯示密碼卡片
-                toolCard.classList.add('hidden');
-                passwordCard.classList.remove('hidden');
-                passwordCard.classList.remove('opacity-0');
-                loginStatus.classList.add('hidden');
-                logoutBtn.classList.add('hidden');
-                
-                // 清除登錄狀態
-                localStorage.removeItem('isLoggedIn');
-            });
-            
-            // 檢查本地存儲中的登錄狀態
-            if (localStorage.getItem('isLoggedIn') === 'true') {
-                passwordCard.classList.add('hidden');
-                toolCard.classList.remove('hidden');
-                loginStatus.classList.remove('hidden');
-                logoutBtn.classList.remove('hidden');
-            }
-            
-            // 工具分類篩選
-            const navTabs = document.querySelectorAll('.nav-tab');
-            const toolItems = document.querySelectorAll('.tool-item');
-            
-            navTabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    // 移除所有選項卡的active類
-                    navTabs.forEach(t => t.classList.remove('active'));
-                    
-                    // 為當前選項卡添加active類
-                    this.classList.add('active');
-                    
-                    // 獲取要篩選的類別
-                    const category = this.getAttribute('data-category');
-                    
-                    // 顯示所有工具或根據類別篩選
-                    toolItems.forEach(item => {
-                        if (category === 'all' || item.getAttribute('data-category') === category) {
-                            item.style.display = 'block';
-                        } else {
-                            item.style.display = 'none';
-                        }
-                    });
-                });
-            });
-        });
-    </script>
-</body>
-</html>
