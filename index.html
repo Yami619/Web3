@@ -557,4 +557,44 @@
         // 密碼驗證和頁面切換
         document.addEventListener('DOMContentLoaded', function() {
             // 密碼驗證
-            const passwordForm =
+            const passwordForm = document.getElementById('password-form');
+            const passwordInput = document.getElementById('password');
+            const errorMessage = document.getElementById('error-message');
+            const passwordCard = document.getElementById('password-card');
+            const toolCard = document.getElementById('tool-card');
+            const loginStatus = document.getElementById('login-status');
+            const logoutBtn = document.getElementById('logout-btn');
+            
+            // 默認密碼設置
+            const correctPassword = '123456'; // 請修改為您想要的密碼
+            
+            // 提交表單
+            passwordForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                if (passwordInput.value === correctPassword) {
+                    // 驗證成功
+                    errorMessage.classList.add('hidden');
+                    passwordCard.classList.add('opacity-0');
+                    
+                    // 延遲顯示工具卡片以顯示動畫效果
+                    setTimeout(() => {
+                        passwordCard.classList.add('hidden');
+                        toolCard.classList.remove('hidden');
+                        toolCard.classList.add('opacity-100');
+                        loginStatus.classList.remove('hidden');
+                        logoutBtn.classList.remove('hidden');
+                    }, 300);
+                    
+                    // 存儲登錄狀態到localStorage
+                    localStorage.setItem('isLoggedIn', 'true');
+                } else {
+                    // 驗證失敗
+                    errorMessage.classList.remove('hidden');
+                    passwordInput.classList.add('border-red-500');
+                    passwordInput.classList.add('focus:ring-red-500');
+                    
+                    // 添加錯誤動畫
+                    passwordInput.classList.add('animate-shake');
+                    setTimeout(() => {
+                        passwordInput.classList.remove('animate-shake');
