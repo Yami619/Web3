@@ -1,0 +1,27 @@
+<!-- 在GitHub Pages靜態頁面嵌入 -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>加密貨幣分析助手</title>
+  <script src="https://cdn.jsdelivr.net/npm/deepseek-chat-sdk@1.0.0"></script>
+</head>
+<body>
+  <h1>AI交易助手</h1>
+  <input type="text" id="question" placeholder="輸入問題，例：ETH現在該做多嗎？">
+  <button onclick="ask()">分析</button>
+  <div id="answer"></div>
+
+  <script>
+    const deepseek = new DeepSeek('your-api-key')
+    
+    async function ask() {
+      const question = document.getElementById('question').value
+      const response = await deepseek.ask(question, { 
+        model: 'deepseek-chat',
+        language: 'zh-TW' // 強制繁體中文
+      })
+      document.getElementById('answer').innerHTML = response
+    }
+  </script>
+</body>
+</html>
