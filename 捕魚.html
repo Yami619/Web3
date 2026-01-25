@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>趣味捕魚遊戲</title>
+    <!-- Tailwind CSS v3 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#F59E0B',
+                        accent: '#10B981',
+                        danger: '#EF4444',
+                        dark: '#1F2937',
+                        light: '#F3F4F6'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    animation: {
+                        'bounce-slow': 'bounce 3s infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-shadow {
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            }
+            .text-shadow-lg {
+                text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
+            }
+            .fish-shadow {
+                filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.3));
+            }
+            .net-shadow {
+                filter: drop-shadow(3px 3px 5px rgba(0, 0, 0, 0.4));
+            }
+            .bubble {
+                position: absolute;
+                background-color: rgba(255, 255, 255, 0.7);
+                border-radius: 50%;
+                animation: rise 3s infinite ease-in;
+            }
+            @keyframes rise {
+                0% {
+                    transform: translateY(0) scale(0);
+                    opacity: 0;
+                }
+                10% {
+                    opacity: 1;
+                }
+                90% {
+                    opacity: 1;
+                }
+                100% {
+                    transform: translateY(-100vh) scale(1);
+                    opacity: 0;
+                }
+            }
+            .score-popup {
+                position: absolute;
+                color: white;
+                font-weight: bold;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+                animation: scoreFloat 1.5s ease-out forwards;
+                pointer-events: none;
+            }
+            @keyframes scoreFloat {
+                0% {
+                    transform: translateY(0) scale(0.5);
+                    opacity: 1;
+                }
+                100% {
+                    transform: translateY(-50px) scale(1.2);
+                    opacity: 0;
+                }
+            }
+            .skill-active {
+                animation: pulse 1s infinite;
+            }
+            .weather-rain {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                overflow: hidden;
+            }
+            .rain-drop {
+                position: absolute;
+                background-color: rgba(173, 216, 230, 0.6);
+                width: 2px;
+                height: 20px;
+                animation: rain-fall 0.8s linear infinite;
+            }
+            @keyframes rain-fall {
+                0% {
+                    transform: translateY(-20px);
+                }
+                100% {
+                    transform: translateY(100vh);
+                }
+            }
+            .weather-sunny {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                width: 60px;
+                height: 60px;
+                background-color: #F59E0B;
+                border-radius: 50%;
+                box-shadow: 0 0 30px #F59E0B, 0 0 60px rgba(245, 158, 11, 0.5);
+                animation: sun-glow 2s infinite alternate;
+            }
+            @keyframes sun-glow {
+                0% {
+                    box-shadow: 0 0 30px #F59E0B, 0 0 60px rgba(245, 158, 11, 0.5);
+                }
+                100% {
+                    box-shadow: 0 0 40px #F59E0B, 0 0 80px rgba(245, 158, 11, 0.7);
+                }
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-blue-300 to-blue-500 min-h-screen overflow-hidden">
+    <!-- 遊戲容器 -->
+    <div class="relative w-full max-w-4xl mx-auto my-4">
+        <!-- 開始介面 -->
+        <div id="start-screen" class="absolute inset-0 bg-blue-500 rounded-xl shadow-2xl flex flex-col items-center justify-center z-50">
+            <h1 class="text-5xl md:text-6xl font-bold text-white mb-6 text-shadow-lg animate-bounce-slow">趣味捕魚</h1>
+            <div class="relative w-48 h-48 mb-8 animate-float">
+                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/5d1abb26062044a7a8722ddb9b3e4820~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260125204146A81E937D33186010DE49&rrcfp=f06b921b&x-expires=1771936923&x-signature=JQlhEp3kUc%2FRrVZU7Of1vZxK2PA%3D" 
+                     alt="魚" class="w-full h-full object-contain fish-shadow">
+            </div>
+            <div class="space-y-4 w-64">
+                <button id="start-btn" class="w-full py-3 px-6 bg-secondary hover:bg-yellow-500 text-white font-bold rounded-full shadow-lg transition-all transform hover:scale-105 active:scale-95">
+                    開始遊戲
+                </button>
+                <button id="how-to-play-btn" class="w-full py-3 px-6 bg-primary hover:bg-blue-600 text-white font-bold rounded-full shadow-lg transition-all transform hover:scale-105 active:scale-95">
+                    遊戲說明
+                </button>
+            </div>
+        </div>
+
+        <!-- 遊戲說明介面 -->
+        <div id="instructions-screen" class="absolute inset-0 bg-blue-500 bg-opacity-95 rounded-xl shadow-2xl flex flex-col items-center justify-center z-40 hidden">
+            <h2 class="text-3xl font-bold text-white mb-6 text-shadow">遊戲說明</h2>
+            <div class="bg-white bg-opacity-20 p-6 rounded-xl max-w-md mx-4">
+                <ul class="text-white space-y-3">
+                    <li><i class="fa fa-hand-pointer-o mr-2"></i> 點擊螢幕發射漁網捕捉游動的魚</li>
+                    <li><i class="fa fa-trophy mr-2"></i> 不同顏色的魚有不同的分數</li>
+                    <li><i class="fa fa-star mr-2"></i> 金色魚: 100分</li>
+                    <li><i class="fa fa-star-o mr-2"></i> 紫色魚: 50分</li>
+                    <li><i class="fa fa-circle-o mr-2"></i> 藍色魚: 20分</li>
+                    <li><i class="fa fa-dot-circle-o mr-2"></i> 橙色魚: 10分</li>
+                    <li><i class="fa fa-bolt mr-2"></i> 使用特殊技能可以更輕鬆地捕魚</li>
+                    <li><i class="fa fa-clock-o mr-2"></i> 遊戲時間為60秒，儘可能獲得高分</li>
+                </ul>
+            </div>
+            <button id="back-to-start-btn" class="mt-8 py-3 px-8 bg-primary hover:bg-blue-600 text-white font-bold rounded-full shadow-lg transition-all transform hover:scale-105 active:scale-95">
+                返回
+            </button>
+        </div>
+
+        <!-- 遊戲介面 -->
+        <div id="game-screen" class="relative bg-blue-500 rounded-xl shadow-2xl overflow-hidden hidden">
+            <!-- 頂部狀態欄 -->
+            <div class="bg-blue-800 bg-opacity-70 text-white p-3 flex justify-between items-center">
+                <div class="flex items-center">
+                    <i class="fa fa-trophy text-yellow-400 mr-2"></i>
+                    <span class="font-bold">分數: <span id="score-display">0</span></span>
+                </div>
+                <div class="flex items-center">
+                    <i class="fa fa-clock-o text-white mr-2"></i>
+                    <span class="font-bold">時間: <span id="time-display">60</span>s</span>
+                </div>
+                <div class="flex items-center">
+                    <i class="fa fa-coins text-yellow-400 mr-2"></i>
+                    <span class="font-bold">金幣: <span id="coins-display">100</span></span>
+                </div>
+            </div>
+
+            <!-- 遊戲區域 -->
+            <div id="game-area" class="relative h-[500px] overflow-hidden">
+                <!-- 背景 -->
+                <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/f02bc683cd7044a7a8722ddb9b3e4820~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260125204146A81E937D33186010DE49&rrcfp=f06b921b&x-expires=1771936922&x-signature=sIIN4TqIAOtlaGN8Jdb217RgseM%3D');"></div>
+                
+                <!-- 天氣效果容器 -->
+                <div id="weather-container" class="absolute inset-0 pointer-events-none"></div>
+                
+                <!-- 魚群將在這裡動態生成 -->
+                <div id="fish-container" class="absolute inset-0"></div>
+                
+                <!-- 漁網將在這裡動態生成 -->
+                <div id="net-container" class="absolute inset-0"></div>
+                
+                <!-- 分數彈出效果將在這裡動態生成 -->
+                <div id="score-popup-container" class="absolute inset-0 pointer-events-none"></div>
+            </div>
+
+            <!-- 底部控制欄 -->
+            <div class="bg-blue-800 bg-opacity-70 p-3">
+                <div class="flex justify-between items-center">
+                    <!-- 技能按鈕 -->
+                    <div class="flex space-x-2">
+                        <button id="skill-net-expansion" class="bg-primary hover:bg-blue-600 text-white p-2 rounded-lg flex flex-col items-center transition-all transform hover:scale-105 active:scale-95" data-cost="50">
+                            <i class="fa fa-expand text-xl"></i>
+                            <span class="text-xs mt-1">擴大漁網</span>
+                            <span class="text-xs text-yellow-300">50金幣</span>
+                        </button>
+                        <button id="skill-freeze" class="bg-primary hover:bg-blue-600 text-white p-2 rounded-lg flex flex-col items-center transition-all transform hover:scale-105 active:scale-95" data-cost="75">
+                            <i class="fa fa-snowflake-o text-xl"></i>
+                            <span class="text-xs mt-1">冰凍魚群</span>
+                            <span class="text-xs text-yellow-300">75金幣</span>
+                        </button>
+                        <button id="skill-multiple-catch" class="bg-primary hover:bg-blue-600 text-white p-2 rounded-lg flex flex-col items-center transition-all transform hover:scale-105 active:scale-95" data-cost="100">
+                            <i class="fa fa-bolt text-xl"></i>
+                            <span class="text-xs mt-1">連擊獎勵</span>
+                            <span class="text-xs text-yellow-300">100金幣</span>
+                        </button>
+                    </div>
+                    
+                    <!-- 暫停按鈕 -->
+                    <button id="pause-btn" class="bg-gray-600 hover:bg-gray-700 text-white p-2 rounded-lg">
+                        <i class="fa fa-pause text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 暫停介面 -->
+        <div id="pause-screen" class="absolute inset-0 bg-black bg-opacity-70 rounded-xl flex flex-col items-center justify-center z-30 hidden">
+            <h2 class="text-4xl font-bold text-white mb-8 text-shadow-lg">遊戲暫停</h2>
+            <div class="space-y-4">
+                <button id="resume-btn" class="py-3 px-8 bg-primary hover:bg-blue-600 text-white font-bold rounded-full shadow-lg transition-all transform hover:scale-105 active:scale-95">
+                    繼續遊戲
+                </button>
+                <button id="restart-btn" class="py-3 px-8 bg-secondary hover:bg-yellow-500 text-white font-bold rounded-full shadow-lg transition-all transform hover:scale-105 active:scale-95">
+                    重新開始
+                </button>
+                <button id="quit-btn" class="py-3 px-8 bg-danger hover:bg-red-600 text-white font-bold rounded-full shadow-lg transition-all transform hover:scale-105 active:scale-95">
+                    退出遊戲
+                </button>
+            </div>
+        </div>
+
+        <!-- 遊戲結束介面 -->
+        <div id="game-over-screen" class="absolute inset-0 bg-blue-900 bg-opacity-90 rounded-xl flex flex-col items-center justify-center z-40 hidden">
+            <h2 class="text-4xl font-bold text-white mb-2 text-shadow-lg">遊戲結束</h2>
+            <p class="text-xl text-white mb-6">你的得分</p>
+            <p id="final-score" class="text-6xl font-bold text-yellow-400 mb-8 text-shadow-lg">0</p>
+            <div class="space-y-4 w-64">
+                <button id="play-again-btn" class="w-full py-3 px-6 bg-secondary hover:bg-yellow-500 text-white font-bold rounded-full shadow-lg transition-all transform hover:scale-105 active:scale-95">
+                    再玩一次
+                </button>
+                <button id="back-to-menu-btn" class="w-full py-3 px-6 bg-primary hover:bg-blue-600 text-white font-bold rounded-full shadow-lg transition-all transform hover:scale-105 active:scale-95">
+                    返回選單
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 遊戲狀態
+        const gameState = {
+            isPlaying: false,
+            isPaused: false,
+            score: 0,
+            time: 60,
+            coins: 100,
+            fishList: [],
+            netList: [],
+            bubbleList: [],
+            gameInterval: null,
+            timeInterval: null,
+            weatherInterval: null,
+            currentWeather: 'sunny', // 'sunny', 'rainy'
+            skills: {
+                netExpansion: { active: false, duration: 0 },
+                freeze: { active: false, duration: 0 },
+                multipleCatch: { active: false, duration: 0 }
+            },
+            consecutiveCatches: 0,
+            comboMultiplier: 1
+        };
+
+        // 魚的類型配置
+        const fishTypes = [
+            {
+                color: 'orange',
+                image: 'https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/5d1abb26062044a7a8722ddb9b3e4820~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260125204146A81E937D33186010DE49&rrcfp=f06b921b&x-expires=1771936923&x-signature=JQlhEp3kUc%2FRrVZU7Of1vZxK2PA%3D',
+                points: 10,
+                speed: 2,
+                size: 50,
+                rarity: 0.5 // 出現機率
+            },
+            {
+                color: 'blue',
+                image: 'https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/8283a2c886074c5a8e420b26de73cba0~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260125204146A81E937D33186010DE49&rrcfp=f06b921b&x-expires=1771936941&x-signature=duYy4R1Hypu7IhVzdl4cflJYr2U%3D',
+                points: 20,
+                speed: 3,
+                size: 45,
+                rarity: 0.3
+            },
+            {
+                color: 'purple',
+                image: 'https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/a35cf78a6e4347afb8656d9de2dd5609~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260125204146A81E937D33186010DE49&rrcfp=f06b921b&x-expires=1771936941&x-signature=cfeTv3Bt27Y4wGUMXsV89f5EG0M%3D',
+                points: 50,
+                speed: 4,
+                size: 40,
+                rarity: 0.15
+            },
+            {
+                color: 'gold',
+                image: 'https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/afad1c5036be49419d49cd7a3f6dfdcc~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260125204146A81E937D33186010DE49&rrcfp=f06b921b&x-expires=1771936941&x-signature=mxacqHjRYlduFrHYJc7Ag8j3RdM%3D',
+                points: 100,
+                speed: 5,
+                size: 55,
+                rarity: 0.05
+            }
+        ];
+
+        // DOM 元素
+        const elements = {
+            startScreen: document.getElementById('start-screen'),
+            instructionsScreen: document.getElementById('instructions-screen'),
+            gameScreen: document.getElementById('game-screen'),
+            pauseScreen: document.getElementById('pause-screen'),
+            gameOverScreen: document.getElementById('game-over-screen'),
+            gameArea: document.getElementById('game-area'),
+            fishContainer: document.getElementById('fish-container'),
+            netContainer: document.getElementById('net-container'),
+            scorePopupContainer: document.getElementById('score-popup-container'),
+            weatherContainer: document.getElementById('weather-container'),
+            scoreDisplay: document.getElementById('score-display'),
+            timeDisplay: document.getElementById('time-display'),
+            coinsDisplay: document.getElementById('coins-display'),
+            finalScore: document.getElementById('final-score'),
+            startBtn: document.getElementById('start-btn'),
+            howToPlayBtn: document.getElementById('how-to-play-btn'),
+            backToStartBtn: document.getElementById('back-to-start-btn'),
+            pauseBtn: document.getElementById('pause-btn'),
+            resumeBtn: document.getElementById('resume-btn'),
+            restartBtn: document.getElementById('restart-btn'),
+            quitBtn: document.getElementById('quit-btn'),
+            playAgainBtn: document.getElementById('play-again-btn'),
+            backToMenuBtn: document.getElementById('back-to-menu-btn'),
+            skillNetExpansion: document.getElementById('skill-net-expansion'),
+            skillFreeze: document.getElementById('skill-freeze'),
+            skillMultipleCatch: document.getElementById('skill-multiple-catch')
+        };
+
+        // 初始化遊戲
+        function init() {
+            // 綁定事件監聽器
+            bindEventListeners();
+            
+            // 初始化遊戲狀態
+            resetGameState();
+        }
+
+        // 綁定事件監聽器
+        function bindEventListeners() {
+            // 開始介面按鈕
+            elements.startBtn.addEventListener('click', startGame);
+            elements.howToPlayBtn.addEventListener('click', showInstructions);
+            elements.backToStartBtn.addEventListener('click', showStartScreen);
+            
+            // 遊戲控制按鈕
+            elements.pauseBtn.addEventListener('click', pauseGame);
+            elements.resumeBtn.addEventListener('click', resumeGame);
+            elements.restartBtn.addEventListener('click', restartGame);
+            elements.quitBtn.addEventListener('click', quitGame);
+            elements.playAgainBtn.addEventListener('click', restartGame);
+            elements.backToMenuBtn.addEventListener('click', quitGame);
+            
+            // 技能按鈕
+            elements.skillNetExpansion.addEventListener('click', () => useSkill('netExpansion'));
+            elements.skillFreeze.addEventListener('click', () => useSkill('freeze'));
+            elements.skillMultipleCatch.addEventListener('click', () => useSkill('multipleCatch'));
+            
+            // 遊戲區域點擊事件 - 發射漁網
+            elements.gameArea.addEventListener('click', handleGameAreaClick);
+        }
+
+        // 重置遊戲狀態
+        function resetGameState() {
+            gameState.isPlaying = false;
+            gameState.isPaused = false;
+            gameState.score = 0;
+            gameState.time = 60;
+            gameState.coins = 100;
+            gameState.fishList = [];
+            gameState.netList = [];
+            gameState.bubbleList = [];
+            gameState.currentWeather = 'sunny';
+            gameState.skills = {
+                netExpansion: { active: false, duration: 0 },
+                freeze: { active: false, duration: 0 },
+                multipleCatch: { active: false, duration: 0 }
+            };
+            gameState.consecutiveCatches = 0;
+            gameState.comboMultiplier = 1;
+            
+            // 清空遊戲區域
+            elements.fishContainer.innerHTML = '';
+            elements.netContainer.innerHTML = '';
+            elements.scorePopupContainer.innerHTML = '';
+            elements.weatherContainer.innerHTML = '';
+            
+            // 更新UI顯示
+            updateUI();
+        }
+
+        // 更新UI顯示
+        function updateUI() {
+            elements.scoreDisplay.textContent = gameState.score;
+            elements.timeDisplay.textContent = gameState.time;
+            elements.coinsDisplay.textContent = gameState.coins;
+            elements.finalScore.textContent = gameState.score;
+            
+            // 更新技能按鈕狀態
+            updateSkillButtons();
+        }
+
+        // 更新技能按鈕狀態
+        function updateSkillButtons() {
+            // 檢查金幣是否足夠
+            const netExpansionCost = parseInt(elements.skillNetExpansion.dataset.cost);
+            const freezeCost = parseInt(elements.skillFreeze.dataset.cost);
+            const multipleCatchCost = parseInt(elements.skillMultipleCatch.dataset.cost);
+            
+            elements.skillNetExpansion.disabled = gameState.coins < netExpansionCost || gameState.skills.netExpansion.active;
+            elements.skillFreeze.disabled = gameState.coins < freezeCost || gameState.skills.freeze.active;
+            elements.skillMultipleCatch.disabled = gameState.coins < multipleCatchCost || gameState.skills.multipleCatch.active;
+            
+            // 新增/移除啟用狀態樣式
+            if (gameState.skills.netExpansion.active) {
+                elements.skillNetExpansion.classList.add('skill-active', 'bg-green-500');
+            } else {
+                elements.skillNetExpansion.classList.remove('skill-active', 'bg-green-500');
+            }
+            
+            if (gameState.skills.freeze.active) {
+                elements.skillFreeze.classList.add('skill-active', 'bg-blue-300');
+            } else {
+                elements.skillFreeze.classList.remove('skill-active', 'bg-blue-300');
+            }
+            
+            if (gameState.skills.multipleCatch.active) {
+                elements.skillMultipleCatch.classList.add('skill-active', 'bg-yellow-500');
+            } else {
+                elements.skillMultipleCatch.classList.remove('skill-active', 'bg-yellow-500');
+            }
+        }
+
+        // 顯示開始介面
+        function showStartScreen() {
+            elements.startScreen.classList.remove('hidden');
+            elements.instructionsScreen.classList.add('hidden');
+            elements.gameScreen.classList.add('hidden');
+            elements.pauseScreen.classList.add('hidden');
+            elements.gameOverScreen.classList.add('hidden');
+        }
+
+        // 顯示遊戲說明介面
+        function showInstructions() {
+            elements.startScreen.classList.add('hidden');
+            elements.instructionsScreen.classList.remove('hidden');
+            elements.gameScreen.classList.add('hidden');
+            elements.pauseScreen.classList.add('hidden');
+            elements.gameOverScreen.classList.add('hidden');
+        }
+
+        // 顯示遊戲介面
+        function showGameScreen() {
+            elements.startScreen.classList.add('hidden');
+            elements.instructionsScreen.classList.add('hidden');
+            elements.gameScreen.classList.remove('hidden');
+            elements.pauseScreen.classList.add('hidden');
+            elements.gameOverScreen.classList.add('hidden');
+        }
+
+        // 顯示暫停介面
+        function showPauseScreen() {
+            elements.pauseScreen.classList.remove('hidden');
+        }
+
+        // 顯示遊戲結束介面
+        function showGameOverScreen() {
+            elements.gameOverScreen.classList.remove('hidden');
+        }
+
+        // 開始遊戲
+        function startGame() {
+            // 重置遊戲狀態
+            resetGameState();
+            
+            // 顯示遊戲介面
+            showGameScreen();
+            
+            // 設定遊戲狀態為進行中
+            gameState.isPlaying = true;
+            
+            // 啟動遊戲迴圈
+            startGameLoop();
+            
+            // 啟動計時器
+            startTimer();
+            
+            // 啟動天氣效果
+            startWeatherEffect();
+        }
+
+        // 暫停遊戲
+        function pauseGame() {
+            if (gameState.isPlaying && !gameState.isPaused) {
+                gameState.isPaused = true;
+                
+                // 清除遊戲迴圈
+                clearInterval(gameState.gameInterval);
+                clearInterval(gameState.timeInterval);
+                clearInterval(gameState.weatherInterval);
+                
+                // 顯示暫停介面
+                showPauseScreen();
+            }
+        }
+
+        // 恢復遊戲
+        function resumeGame() {
+            if (gameState.isPlaying && gameState.isPaused) {
+                gameState.isPaused = false;
+                
+                // 隱藏暫停介面
+                elements.pauseScreen.classList.add('hidden');
+                
+                // 重新啟動遊戲迴圈
+                startGameLoop();
+                
+                // 重新啟動計時器
+                startTimer();
+                
+                // 重新啟動天氣效果
+                startWeatherEffect();
+            }
+        }
+
+        // 重新開始遊戲
+        function restartGame() {
+            // 清除所有計時器
+            clearAllIntervals();
+            
+            // 開始新遊戲
+            startGame();
+        }
+
+        // 退出遊戲
+        function quitGame() {
+            // 清除所有計時器
+            clearAllIntervals();
+            
+            // 重置遊戲狀態
+            resetGameState();
+            
+            // 顯示開始介面
+            showStartScreen();
+        }
+
+        // 清除所有計時器
+        function clearAllIntervals() {
+            clearInterval(gameState.gameInterval);
+            clearInterval(gameState.timeInterval);
+            clearInterval(gameState.weatherInterval);
+        }
+
+        // 啟動遊戲迴圈
+        function startGameLoop() {
+            gameState.gameInterval = setInterval(() => {
+                // 生成新魚
+                if (Math.random() < 0.1) { // 10% 的機率生成魚
+                    createFish();
+                }
+                
+                // 生成氣泡
+                if (Math.random() < 0.2) { // 20% 的機率生成氣泡
+                    createBubble();
+                }
+                
+                // 更新魚的位置
+                updateFishPositions();
+                
+                // 更新漁網的位置
+                updateNetPositions();
+                
+                // 更新氣泡的位置
+                updateBubblePositions();
+                
+                // 偵測碰撞
+                checkCollisions();
+                
+                // 更新技能持續時間
+                updateSkills();
+                
+            }, 30); // 每30毫秒更新一次
+        }
+
+        // 啟動計時器
+        function startTimer() {
+            gameState.timeInterval = setInterval(() => {
+                if (gameState.time > 0) {
+                    gameState.time--;
+                    updateUI();
+                } else {
+                    // 遊戲時間結束
+                    endGame();
+                }
+            }, 1000); // 每秒更新一次
+        }
+
+        // 啟動天氣效果
+        function startWeatherEffect() {
+            // 初始天氣
+            setWeather(gameState.currentWeather);
+            
+            // 隨機切換天氣
+            gameState.weatherInterval = setInterval(() => {
+                if (Math.random() < 0.01) { // 1% 的機率切換天氣
+                    const weathers = ['sunny', 'rainy'];
+                    const newWeather = weathers[Math.floor(Math.random() * weathers.length)];
+                    setWeather(newWeather);
+                }
+            }, 1000); // 每秒檢查一次
+        }
+
+        // 設定天氣效果
+        function setWeather(weather) {
+            gameState.currentWeather = weather;
+            elements.weatherContainer.innerHTML = '';
+            
+            if (weather === 'sunny') {
+                // 新增太陽效果
+                const sun = document.createElement('div');
+                sun.className = 'weather-sunny';
+                elements.weatherContainer.appendChild(sun);
+            } else if (weather === 'rainy') {
+                // 新增雨滴效果
+                for (let i = 0; i < 100; i++) {
+                    createRainDrop();
+                }
+            }
+        }
+
+        // 建立雨滴
+        function createRainDrop() {
+            const drop = document.createElement('div');
+            drop.className = 'rain-drop';
+            drop.style.left = `${Math.random() * 100}%`;
+            drop.style.animationDelay = `${Math.random() * 0.8}s`;
+            drop.style.animationDuration = `${0.5 + Math.random() * 0.5}s`;
+            elements.weatherContainer.appendChild(drop);
+            
+            // 雨滴動畫結束後移除
+            drop.addEventListener('animationend', () => {
+                drop.remove();
+                // 建立新的雨滴
+                createRainDrop();
+            });
+        }
+
+        // 建立魚
+        function createFish() {
+            // 根據稀有度選擇魚的類型
+            const randomValue = Math.random();
+            let cumulativeProbability = 0;
+            let selectedFishType = null;
+            
+            for (const fishType of fishTypes) {
+                cumulativeProbability += fishType.rarity;
+                if (randomValue <= cumulativeProbability) {
+                    selectedFishType = fishType;
+                    break;
+                }
+            }
+            
+            // 如果沒有選中魚（理論上不應該發生），預設選擇第一種
+            if (!selectedFishType) {
+                selectedFishType = fishTypes[0];
+            }
+            
+            // 建立魚元素
+            const fishElement = document.createElement('div');
+            fishElement.className = 'absolute transition-transform duration-300 fish-shadow';
+            fishElement.style.width = `${selectedFishType.size}px`;
+            fishElement.style.height = `${selectedFishType.size}px`;
+            
+            // 建立魚圖片
+            const fishImage = document.createElement('img');
+            fishImage.src = selectedFishType.image;
+            fishImage.alt = `${selectedFishType.color} fish`;
+            fishImage.className = 'w-full h-full object-contain';
+            fishElement.appendChild(fishImage);
+            
+            // 隨機決定魚的游動方向
+            const direction = Math.random() < 0.5 ? 'left' : 'right';
+            
+            // 設定魚的初始位置
+            if (direction === 'left') {
+                fishElement.style.right = `-${selectedFishType.size}px`;
+                fishImage.style.transform = 'scaleX(-1)'; // 翻轉圖片
+            } else {
+                fishElement.style.left = `-${selectedFishType.size}px`;
+            }
+            
+            fishElement.style.top = `${Math.random() * (elements.gameArea.clientHeight - selectedFishType.size)}px`;
+            
+            // 新增到容器
+            elements.fishContainer.appendChild(fishElement);
+            
+            // 建立魚物件
+            const fish = {
+                element: fishElement,
+                type: selectedFishType,
+                direction: direction,
+                speed: selectedFishType.speed,
+                caught: false,
+                frozen: false
+            };
+            
+            // 新增到魚列表
+            gameState.fishList.push(fish);
+        }
+
+        // 更新魚的位置
+        function updateFishPositions() {
+            for (let i = gameState.fishList.length - 1; i >= 0; i--) {
+                const fish = gameState.fishList[i];
+                
+                // 如果魚被冰凍，不更新位置
+                if (fish.frozen) continue;
+                
+                // 如果魚被捕獲，從列表中移除
+                if (fish.caught) {
+                    fish.element.remove();
+                    gameState.fishList.splice(i, 1);
+                    continue;
+                }
+                
+                // 取得當前位置
+                const currentLeft = parseInt(fish.element.style.left) || 0;
+                const currentRight = parseInt(fish.element.style.right) || 0;
+                
+                // 更新位置
+                if (fish.direction === 'left') {
+                    fish.element.style.right = `${currentRight + fish.speed}px`;
+                    
+                    // 檢查是否超出左邊界
+                    if (currentRight > elements.gameArea.clientWidth) {
+                        fish.element.remove();
+                        gameState.fishList.splice(i, 1);
+                    }
+                } else {
+                    fish.element.style.left = `${currentLeft + fish.speed}px`;
+                    
+                    // 檢查是否超出右邊界
+                    if (currentLeft > elements.gameArea.clientWidth) {
+                        fish.element.remove();
+                        gameState.fishList.splice(i, 1);
+                    }
+                }
+            }
+        }
+
+        // 建立漁網
+        function createNet(x, y) {
+            // 建立漁網元素
+            const netElement = document.createElement('div');
+            netElement.className = 'absolute transition-transform duration-300 net-shadow';
+            
+            // 設定漁網大小
+            const netSize = gameState.skills.netExpansion.active ? 120 : 80;
+            netElement.style.width = `${netSize}px`;
+            netElement.style.height = `${netSize}px`;
+            
+            // 建立漁網圖片
+            const netImage = document.createElement('img');
+            netImage.src = 'https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/c1e5bf1893f54b368acdb3739b1a553f~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260125204146A81E937D33186010DE49&rrcfp=f06b921b&x-expires=1771936922&x-signature=JjdSX0LVYF5rc5Nyfe8uL1P9XIk%3D';
+            netImage.alt = 'Fishing net';
+            netImage.className = 'w-full h-full object-contain';
+            netElement.appendChild(netImage);
+            
+            // 設定漁網位置（置中）
+            netElement.style.left = `${x - netSize / 2}px`;
+            netElement.style.top = `${y - netSize / 2}px`;
+            
+            // 新增到容器
+            elements.netContainer.appendChild(netElement);
+            
+            // 建立漁網物件
+            const net = {
+                element: netElement,
+                x: x,
+                y: y,
+                size: netSize,
+                active: true,
+                expansion: gameState.skills.netExpansion.active
+            };
+            
+            // 新增到漁網列表
+            gameState.netList.push(net);
+            
+            // 漁網動畫
+            setTimeout(() => {
+                net.active = false;
+                netElement.style.opacity = '0';
+                
+                // 移除漁網元素
+                setTimeout(() => {
+                    netElement.remove();
+                    
+                    // 從漁網列表中移除
+                    const index = gameState.netList.indexOf(net);
+                    if (index !== -1) {
+                        gameState.netList.splice(index, 1);
+                    }
+                }, 300);
+            }, 500);
+        }
+
+        // 更新漁網的位置
+        function updateNetPositions() {
+            // 漁網位置不需要更新，因為它們是靜態的，只有動畫效果
+        }
+
+        // 建立氣泡
+        function createBubble() {
+            // 建立氣泡元素
+            const bubbleElement = document.createElement('div');
+            bubbleElement.className = 'bubble';
+            
+            // 隨機大小
+            const size = 5 + Math.random() * 15;
+            bubbleElement.style.width = `${size}px`;
+            bubbleElement.style.height = `${size}px`;
+            
+            // 隨機位置
+            bubbleElement.style.left = `${Math.random() * elements.gameArea.clientWidth}px`;
+            bubbleElement.style.bottom = '0';
+            
+            // 隨機上升速度
+            bubbleElement.style.animationDuration = `${2 + Math.random() * 3}s`;
+            
+            // 新增到容器
+            elements.weatherContainer.appendChild(bubbleElement);
+            
+            // 氣泡動畫結束後移除
+            bubbleElement.addEventListener('animationend', () => {
+                bubbleElement.remove();
+            });
+        }
+
+        // 更新氣泡的位置
+        function updateBubblePositions() {
+            // 氣泡位置由CSS動畫控制，不需要在這裡更新
+        }
+
+        // 處理遊戲區域點擊事件
+        function handleGameAreaClick(event) {
+            if (!gameState.isPlaying || gameState.isPaused) return;
+            
+            // 取得點擊位置（相對於遊戲區域）
+            const rect = elements.gameArea.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            
+            // 建立漁網
+            createNet(x, y);
+        }
+
+        // 偵測碰撞
+        function checkCollisions() {
+            // 重置連擊計數
+            let caughtThisFrame = false;
+            
+            // 檢查每個漁網與每個魚的碰撞
+            for (const net of gameState.netList) {
+                if (!net.active) continue;
+                
+                for (const fish of gameState.fishList) {
+                    if (fish.caught) continue;
+                    
+                    // 取得魚的位置和大小
+                    const fishRect = fish.element.getBoundingClientRect();
+                    const fishX = fishRect.left + fishRect.width / 2;
+                    const fishY = fishRect.top + fishRect.height / 2;
+                    
+                    // 取得漁網的位置和大小
+                    const netRect = net.element.getBoundingClientRect();
+                    const netX = netRect.left + netRect.width / 2;
+                    const netY = netRect.top + netRect.height / 2;
+                    
+                    // 計算距離
+                    const distance = Math.sqrt(Math.pow(fishX - netX, 2) + Math.pow(fishY - netY, 2));
+                    
+                    // 檢查是否碰撞
+                    if (distance < (net.size / 2 + fish.type.size / 2)) {
+                        // 魚被捕獲
+                        fish.caught = true;
+                        
+                        // 增加連擊計數
+                        gameState.consecutiveCatches++;
+                        caughtThisFrame = true;
+                        
+                        // 計算得分（考慮連擊倍數）
+                        let points = fish.type.points;
+                        
+                        // 如果連擊獎勵技能啟用，增加額外分數
+                        if (gameState.skills.multipleCatch.active) {
+                            points *= 2;
+                        }
+                        
+                        // 套用連擊倍數
+                        const finalPoints = Math.round(points * gameState.comboMultiplier);
+                        
+                        // 增加分數
+                        gameState.score += finalPoints;
+                        
+                        // 增加金幣（基礎金幣為得分的10%）
+                        const coinsEarned = Math.round(finalPoints * 0.1);
+                        gameState.coins += coinsEarned;
+                        
+                        // 顯示得分彈出效果
+                        showScorePopup(fishX - netRect.left, fishY - netRect.top, finalPoints);
+                        
+                        // 更新UI
+                        updateUI();
+                        
+                        // 魚被捕獲的動畫
+                        fish.element.style.transform = 'scale(0)';
+                        fish.element.style.opacity = '0';
+                    }
+                }
+            }
+            
+            // 如果本影格沒有捕獲任何魚，重置連擊計數
+            if (!caughtThisFrame) {
+                gameState.consecutiveCatches = 0;
+                gameState.comboMultiplier = 1;
+            } else {
+                // 更新連擊倍數（每3次連擊增加0.1倍，最高2倍）
+                gameState.comboMultiplier = Math.min(1 + Math.floor(gameState.consecutiveCatches / 3) * 0.1, 2);
+            }
+        }
+
+        // 顯示得分彈出效果
+        function showScorePopup(x, y, points) {
+            // 建立得分彈出元素
+            const popupElement = document.createElement('div');
+            popupElement.className = 'score-popup';
+            popupElement.textContent = `+${points}`;
+            popupElement.style.left = `${x}px`;
+            popupElement.style.top = `${y}px`;
+            
+            // 根據分數設定顏色
+            if (points >= 100) {
+                popupElement.style.color = '#FFD700'; // 金色
+                popupElement.style.fontSize = '24px';
+            } else if (points >= 50) {
+                popupElement.style.color = '#9370DB'; // 紫色
+                popupElement.style.fontSize = '20px';
+            } else {
+                popupElement.style.color = '#FFFFFF'; // 白色
+                popupElement.style.fontSize = '16px';
+            }
+            
+            // 新增到容器
+            elements.scorePopupContainer.appendChild(popupElement);
+            
+            // 動畫結束後移除
+            popupElement.addEventListener('animationend', () => {
+                popupElement.remove();
+            });
+        }
+
+        // 使用技能
+        function useSkill(skillName) {
+            if (!gameState.isPlaying || gameState.isPaused) return;
+            
+            // 取得技能按鈕和消耗
+            let skillButton;
+            let cost;
+            
+            switch (skillName) {
+                case 'netExpansion':
+                    skillButton = elements.skillNetExpansion;
+                    cost = parseInt(skillButton.dataset.cost);
+                    break;
+                case 'freeze':
+                    skillButton = elements.skillFreeze;
+                    cost = parseInt(skillButton.dataset.cost);
+                    break;
+                case 'multipleCatch':
+                    skillButton = elements.skillMultipleCatch;
+                    cost = parseInt(skillButton.dataset.cost);
+                    break;
+                default:
+                    return;
+            }
+            
+            // 檢查金幣是否足夠
+            if (gameState.coins < cost) {
+                // 可以新增一個提示效果
+                return;
+            }
+            
+            // 檢查技能是否已經啟用
+            if (gameState.skills[skillName].active) {
+                return;
+            }
+            
+            // 扣除金幣
+            gameState.coins -= cost;
+            
+            // 啟用技能
+            switch (skillName) {
+                case 'netExpansion':
+                    gameState.skills.netExpansion.active = true;
+                    gameState.skills.netExpansion.duration = 10; // 持續10秒
+                    break;
+                case 'freeze':
+                    gameState.skills.freeze.active = true;
+                    gameState.skills.freeze.duration = 5; // 持續5秒
+                    
+                    // 冰凍所有魚
+                    for (const fish of gameState.fishList) {
+                        fish.frozen = true;
+                        fish.element.style.filter = 'brightness(0.7) hue-rotate(180deg)';
+                    }
+                    break;
+                case 'multipleCatch':
+                    gameState.skills.multipleCatch.active = true;
+                    gameState.skills.multipleCatch.duration = 8; // 持續8秒
+                    break;
+            }
+            
+            // 更新UI
+            updateUI();
+        }
+
+        // 更新技能狀態
+        function updateSkills() {
+            // 更新擴大漁網技能
+            if (gameState.skills.netExpansion.active) {
+                gameState.skills.netExpansion.duration -= 0.03; // 每30毫秒減少0.03秒
+                
+                if (gameState.skills.netExpansion.duration <= 0) {
+                    gameState.skills.netExpansion.active = false;
+                    updateUI();
+                }
+            }
+            
+            // 更新冰凍魚群技能
+            if (gameState.skills.freeze.active) {
+                gameState.skills.freeze.duration -= 0.03; // 每30毫秒減少0.03秒
+                
+                if (gameState.skills.freeze.duration <= 0) {
+                    gameState.skills.freeze.active = false;
+                    
+                    // 解凍所有魚
+                    for (const fish of gameState.fishList) {
+                        fish.frozen = false;
+                        fish.element.style.filter = '';
+                    }
+                    
+                    updateUI();
+                }
+            }
+            
+            // 更新連擊獎勵技能
+            if (gameState.skills.multipleCatch.active) {
+                gameState.skills.multipleCatch.duration -= 0.03; // 每30毫秒減少0.03秒
+                
+                if (gameState.skills.multipleCatch.duration <= 0) {
+                    gameState.skills.multipleCatch.active = false;
+                    updateUI();
+                }
+            }
+        }
+
+        // 結束遊戲
+        function endGame() {
+            // 設定遊戲狀態為非進行中
+            gameState.isPlaying = false;
+            
+            // 清除所有計時器
+            clearAllIntervals();
+            
+            // 顯示遊戲結束介面
+            showGameOverScreen();
+        }
+
+        // 初始化遊戲
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
