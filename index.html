@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title> 壯壯 專注力＆記憶力訓練｜粉色版</title>
+<title>🙉🙉 壯壯 專注力＆記憶力訓練｜粉色版｜進階計時挑戰</title>
 <style>
 *{
     margin:0;
@@ -32,6 +32,12 @@ body{
     font-size:16px;
     color:#c2507d;
     margin:8px 0;
+}
+.time-info{
+    font-size:16px;
+    color:#d65a8a;
+    margin:8px 0;
+    font-weight:bold;
 }
 /* 訓練說明粉色框 */
 .desc-box{
@@ -64,6 +70,16 @@ body{
 .lv8{ grid-template-columns: repeat(5, 66px); }
 .lv9{ grid-template-columns: repeat(5, 64px); }
 .lv10{ grid-template-columns: repeat(6, 62px); }
+.lv11{ grid-template-columns: repeat(6, 60px); }
+.lv12{ grid-template-columns: repeat(6, 58px); }
+.lv13{ grid-template-columns: repeat(7, 56px); }
+.lv14{ grid-template-columns: repeat(7, 54px); }
+.lv15{ grid-template-columns: repeat(7, 52px); }
+.lv16{ grid-template-columns: repeat(8, 50px); }
+.lv17{ grid-template-columns: repeat(8, 48px); }
+.lv18{ grid-template-columns: repeat(8, 46px); }
+.lv19{ grid-template-columns: repeat(8, 44px); }
+.lv20{ grid-template-columns: repeat(8, 42px); }
 
 /* 卡片粉色樣式 */
 .card{
@@ -127,21 +143,26 @@ body{
 </head>
 <body>
 
-<div class="title"> 壯壯 專注力＆記憶力訓練｜粉色版</div>
+<div class="title">20關專注訓練</div>
 <div class="level-info">
-    關卡：<span id="level">1</span> / 10
+    關卡：<span id="level">1</span> / 20
 </div>
 <div class="step-info">
     翻牌次數：<span id="step">0</span>
 </div>
+<div class="time-info" id="timeInfo" style="display:none;">
+    剩餘時間：<span id="timeLeft">0</span> 秒
+</div>
 
 <!-- 訓練方式說明 + 防作弊規則 -->
 <div class="desc-box">
- 訓練目標：<br>
-    1. 專注力：專心看每一張翻開的牌<br>
-    2. 記憶力：記住圖案出現的位置<br>
-    3. 完成一關自動解鎖下一關，10關全破訓練成功<br>
-    4. 已生成專屬4碼英文+數字，重新整理或更換頁面，編碼會改變，晴要加油 ！</div>
+    訓練方式：<br>
+    1. 專心記住每張卡片的圖案與位置<br>
+    2. 點擊翻牌，找出相同圖案配對<br>
+    3. 完成一關自動解鎖下一關，20關全破訓練成功<br>
+    4. 1-10關使用數字顏色配對，11-20關開啟計時挑戰模式，訓練速度 <br>
+    5. 本訓練已生成專屬4碼英文+數字，若重新整理或更換頁面，編碼會改變，方便辨識作弊
+</div>
 
 <!-- 防作弊 4 碼顯示 -->
 <div style="margin:10px 0; font-size:16px; color:#d65a87;">
@@ -173,33 +194,65 @@ function generateSecretCode() {
 const secretCode = generateSecretCode();
 document.getElementById('secretCode').innerText = secretCode;
 
+// 20關難度設定（11-20關開啟計時）
 const levelConfig = [
-  { pairs:3, grid:'lv1' },
-  { pairs:4, grid:'lv2' },
-  { pairs:5, grid:'lv3' },
-  { pairs:6, grid:'lv4' },
-  { pairs:7, grid:'lv5' },
-  { pairs:8, grid:'lv6' },
-  { pairs:9, grid:'lv7' },
-  { pairs:10, grid:'lv8' },
-  { pairs:11, grid:'lv9' },
-  { pairs:12, grid:'lv10' }
+  { pairs:3, grid:'lv1', time:0 },    // 1
+  { pairs:4, grid:'lv2', time:0 },    // 2
+  { pairs:5, grid:'lv3', time:0 },    // 3
+  { pairs:6, grid:'lv4', time:0 },    // 4
+  { pairs:7, grid:'lv5', time:0 },    // 5
+  { pairs:8, grid:'lv6', time:0 },    // 6
+  { pairs:9, grid:'lv7', time:0 },    // 7
+  { pairs:10, grid:'lv8', time:0 },   // 8
+  { pairs:11, grid:'lv9', time:0 },   // 9
+  { pairs:12, grid:'lv10', time:0 },  // 10
+  { pairs:13, grid:'lv11', time:60 }, // 11 - 計時60秒
+  { pairs:14, grid:'lv12', time:60 }, // 12 - 計時60秒
+  { pairs:15, grid:'lv13', time:55 }, // 13 - 計時55秒
+  { pairs:16, grid:'lv14', time:55 }, // 14 - 計時55秒
+  { pairs:17, grid:'lv15', time:50 }, // 15 - 計時50秒
+  { pairs:18, grid:'lv16', time:50 }, // 16 - 計時50秒
+  { pairs:19, grid:'lv17', time:45 }, // 17 - 計時45秒
+  { pairs:20, grid:'lv18', time:45 }, // 18 - 計時45秒
+  { pairs:21, grid:'lv19', time:40 }, // 19 - 計時40秒
+  { pairs:22, grid:'lv20', time:40 }  // 20 - 計時40秒
 ];
 
-const numberPool = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24];
+// 數字顏色列表（1-10關使用）
 const colorList = ["#ff4444","#00C851","#33b5e5","#ffbb33","#aa66cc","#ff8800","#0099cc","#99cc00","#ff4444","#33b5e5","#aa66cc","#ff8800"];
+const numberPool = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24];
+
+// 兒童友好圖案庫（11-20關使用）
+const iconPool = [
+    '🐶','🐱','🐭','🐹','🐰','🦊','🐻','🐼',
+    '🐨','🐯','🦁','🐮','🐷','🐸','🐵','🐔',
+    '🐧','🐦','🐤','🦆','🦅','🦉','🦇','🐺'
+];
 
 let currentLevel = 1;
 let cards = [];
 let flipped = [];
 let matched = 0;
 let steps = 0;
-let levelSteps = Array(10).fill(0); // 記錄每關翻牌次數
+let levelSteps = Array(20).fill(0); // 記錄每關翻牌次數
+let timeLeft = 0;
+let timerInterval = null;
 
 function startGame(){
   const config = levelConfig[currentLevel-1];
   document.getElementById('level').innerText = currentLevel;
   document.getElementById('step').innerText = '0';
+
+  // 處理計時模式
+  if(config.time > 0){
+    timeLeft = config.time;
+    document.getElementById('timeInfo').style.display = 'block';
+    document.getElementById('timeLeft').innerText = timeLeft;
+    startTimer();
+  } else {
+    document.getElementById('timeInfo').style.display = 'none';
+    if(timerInterval) clearInterval(timerInterval);
+  }
 
   const box = document.getElementById('gameBox');
   box.className = 'game-box ' + config.grid;
@@ -211,32 +264,70 @@ function startGame(){
   steps = 0;
 
   let pairList = [];
-  for(let i=0;i<config.pairs;i++){
-    pairList.push(numberPool[i]);
-    pairList.push(numberPool[i]);
+  if(currentLevel <= 10){
+    // 1-10關：數字+顏色
+    for(let i=0;i<config.pairs;i++){
+      pairList.push(numberPool[i]);
+      pairList.push(numberPool[i]);
+    }
+    pairList = pairList.sort(()=>Math.random()-0.5);
+    pairList.forEach(num=>{
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.dataset.num = num;
+      card.onclick = ()=>flipCard(card);
+      box.appendChild(card);
+      cards.push(card);
+    });
+  } else {
+    // 11-20關：兒童圖案
+    for(let i=0;i<config.pairs;i++){
+      pairList.push(iconPool[i]);
+      pairList.push(iconPool[i]);
+    }
+    pairList = pairList.sort(()=>Math.random()-0.5);
+    pairList.forEach(icon=>{
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.dataset.icon = icon;
+      card.onclick = ()=>flipCard(card);
+      box.appendChild(card);
+      cards.push(card);
+    });
   }
-  pairList = pairList.sort(()=>Math.random()-0.5);
-
-  pairList.forEach(num=>{
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.dataset.num = num;
-    card.onclick = ()=>flipCard(card);
-    box.appendChild(card);
-    cards.push(card);
-  });
 
   updateStatsDisplay(); // 更新統計顯示
+}
+
+function startTimer(){
+  if(timerInterval) clearInterval(timerInterval);
+  timerInterval = setInterval(()=>{
+    timeLeft--;
+    document.getElementById('timeLeft').innerText = timeLeft;
+    if(timeLeft <= 0){
+      clearInterval(timerInterval);
+      alert('時間到！本關挑戰失敗，請重新嘗試');
+      startGame(); // 重新開始本關
+    }
+  }, 1000);
 }
 
 function flipCard(card){
   if(flipped.length >=2) return;
   if(card.classList.contains('flipped')) return;
 
-  const num = parseInt(card.dataset.num);
-  card.classList.add('flipped');
-  card.innerText = num;
-  card.style.color = colorList[(num-1) % colorList.length];
+  if(currentLevel <= 10){
+    // 1-10關：數字+顏色
+    const num = parseInt(card.dataset.num);
+    card.classList.add('flipped');
+    card.innerText = num;
+    card.style.color = colorList[(num-1) % colorList.length];
+  } else {
+    // 11-20關：兒童圖案
+    const icon = card.dataset.icon;
+    card.classList.add('flipped');
+    card.innerText = icon;
+  }
 
   flipped.push(card);
   steps++;
@@ -249,30 +340,44 @@ function flipCard(card){
 
 function checkMatch(){
   const [a,b] = flipped;
-  if(a.dataset.num === b.dataset.num){
-    a.classList.add('matched');
-    b.classList.add('matched');
-    matched +=2;
-
-    const total = levelConfig[currentLevel-1].pairs *2;
-    if(matched === total){
-      levelSteps[currentLevel-1] = steps; // 記錄本關翻牌次數
-      setTimeout(()=>{
-        if(currentLevel < 10){
-          alert(`完成第${currentLevel}關，自動進入第${currentLevel+1}關`);
-          currentLevel++;
-          startGame();
-        }else{
-          alert("🎉 10關全部完成！專注力訓練成功！可以幫妳完成一個小願望！");
-          updateStatsDisplay(); // 完成後更新統計
-        }
-      },300);
+  if(currentLevel <= 10){
+    if(a.dataset.num === b.dataset.num){
+      a.classList.add('matched');
+      b.classList.add('matched');
+      matched +=2;
+    } else {
+      a.classList.remove('flipped');
+      b.classList.remove('flipped');
+      a.innerText = '';
+      b.innerText = '';
     }
-  }else{
-    a.classList.remove('flipped');
-    b.classList.remove('flipped');
-    a.innerText = '';
-    b.innerText = '';
+  } else {
+    if(a.dataset.icon === b.dataset.icon){
+      a.classList.add('matched');
+      b.classList.add('matched');
+      matched +=2;
+    } else {
+      a.classList.remove('flipped');
+      b.classList.remove('flipped');
+      a.innerText = '';
+      b.innerText = '';
+    }
+  }
+
+  const total = levelConfig[currentLevel-1].pairs *2;
+  if(matched === total){
+    levelSteps[currentLevel-1] = steps; // 記錄本關翻牌次數
+    if(timerInterval) clearInterval(timerInterval);
+    setTimeout(()=>{
+      if(currentLevel < 20){
+        alert(`完成第${currentLevel}關，自動進入第${currentLevel+1}關`);
+        currentLevel++;
+        startGame();
+      }else{
+        alert("🎉 20關全部完成！專注力訓練成功！");
+        updateStatsDisplay(); // 完成後更新統計
+      }
+    },300);
   }
   flipped = [];
 }
@@ -281,7 +386,7 @@ function checkMatch(){
 function updateStatsDisplay() {
   const statsList = document.getElementById('statsList');
   statsList.innerHTML = '';
-  for(let i=0; i<10; i++){
+  for(let i=0; i<20; i++){
     const statItem = document.createElement('div');
     statItem.textContent = `第${i+1}關：${levelSteps[i]}次`;
     if(levelSteps[i] > 0){
@@ -306,7 +411,8 @@ function checkResetPassword(){
 
 function resetAll(){
   currentLevel = 1;
-  levelSteps = Array(10).fill(0); // 重置統計
+  levelSteps = Array(20).fill(0); // 重置統計
+  if(timerInterval) clearInterval(timerInterval);
   startGame();
 }
 
