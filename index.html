@@ -3,18 +3,47 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>溫馨小冒險</title>
+<title>溫馨小冒險：我是體貼懂事的好孩子</title>
 <style>
-body{font-family:微軟正黑體; background:#fff5f8; padding:20px; font-size:18px;}
-.main{max-width:500px; margin:auto; background:white; padding:25px; border-radius:16px; box-shadow:0 0 10px #aaa;}
-.btn{width:100%; padding:12px; margin:8px 0; background:#f2a6c4; color:white; border:none; border-radius:10px; font-size:17px;}
-.output{white-space:pre-line; line-height:1.6; margin-bottom:15px;}
+body{
+  font-family: "Microsoft JhengHei", sans-serif;
+  background: #fff5f8;
+  padding: 20px;
+  font-size: 18px;
+  line-height: 1.6;
+}
+.main{
+  max-width: 520px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 26px;
+  border-radius: 18px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.1);
+}
+.output{
+  white-space: pre-line;
+  margin-bottom: 20px;
+}
+.btn{
+  width: 100%;
+  padding: 14px;
+  margin: 8px 0;
+  background: #f2a6c4;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 17px;
+  cursor: pointer;
+}
+.btn:hover{
+  background: #e68fa8;
+}
 </style>
 </head>
 <body>
 <div class="main">
-<div class="output" id="output"></div>
-<div id="buttons"></div>
+  <div class="output" id="output"></div>
+  <div id="buttons"></div>
 </div>
 
 <script>
@@ -27,7 +56,10 @@ function print(txt) {
   window.scrollTo(0, document.body.scrollHeight);
 }
 
-function clearBtn() { buttons.innerHTML = ""; }
+function clearBtn() {
+  buttons.innerHTML = "";
+}
+
 function btn(text, func) {
   let b = document.createElement("button");
   b.className = "btn";
@@ -36,138 +68,168 @@ function btn(text, func) {
   buttons.appendChild(b);
 }
 
-function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+// 你指定的「每個結局都要出現」的固定文字
+const commonEnd = `
+家人愛你，照顧你，給你吃、給你穿、陪你長大。
+但他們也是人，也會累、也會忙、也有壓力。
+長幼有序，小朋友要聽話、不頂嘴、體諒大人。
+你不需要什麼都知道，
+大人也不需要每件事都跟你報備。
+你只要乖乖的、懂事的，就是最棒的孩子！
+`;
 
-async function start() {
+// 遊戲開頭
+function start() {
   score = 0;
   output.innerHTML = "";
   print("🌟 溫馨小冒險：我是體貼懂事的好孩子 🌟");
-  await scene1();
+  scene1();
 }
 
-//--------------- 劇情開始 ----------------
-async function scene1() {
+// 1. 早上媽媽要上班
+function scene1() {
   print("☀️ 一大早，媽媽就忙東忙西，要準備上班賺錢。\n她時間很趕，沒有辦法慢慢陪你聊天。");
-  return new Promise(r => {
-    clearBtn();
-    btn("1. 安靜乖乖的，讓媽媽順利出門", async () => {
-      print("😊 媽媽很放心，開心去上班。");
-      score++; await scene2();
-    });
-    btn("2. 一直纏著媽媽，不讓她走", async () => {
-      print("😔 媽媽已經很趕了，還要花時間哄你，會更累。");
-      await scene2();
-    });
-    btn("3. 鬧脾氣，跟媽媽頂嘴", async () => {
-      print("😔 頂嘴會讓媽媽很傷心，媽媽上班已經很辛苦。");
-      await scene2();
-    });
-  });
-}
-
-async function scene2() {
-  print("📞 媽媽傳訊息：今天會晚一點回家。\n她工作很忙，沒有辦法一直跟你解釋。");
-  return new Promise(r => {
-    clearBtn();
-    btn("1. 乖乖等媽媽，相信媽媽", async () => {
-      print("❤️ 你很體諒大人。\n大人沒有義務每件事都跟你報備。");
-      score++; await scene3();
-    });
-    btn("2. 一直追問：你去哪？為什麼不講？", async () => {
-      print("😔 媽媽已經很忙了，一直問只會讓她更壓力。");
-      await scene3();
-    });
-    btn("3. 生氣，覺得大人一定要跟你報備", async () => {
-      print("😔 大人是照顧你的人，不是什麼都要向你報告的人。");
-      await scene3();
-    });
-  });
-}
-
-async function scene3() {
-  print("🎹 白天你在家，要把鋼琴練好，認真、專心、不偷懶。");
-  return new Promise(r => {
-    clearBtn();
-    btn("1. 認真練好鋼琴", async () => {
-      print("👍 自己的事情自己做好，不用大人一直操心。");
-      score++; await scene4();
-    });
-    btn("2. 偷懶不練琴，隨便亂彈", async () => {
-      print("😔 敷衍練琴，琴藝不會進步。");
-      await scene4();
-    });
-    btn("3. 不想練，還要大人哄", async () => {
-      print("😔 練琴是你自己的事情，沒有人有義務一直哄你。");
-      await scene4();
-    });
-  });
-}
-
-async function scene4() {
-  print("🌙 晚上該睡覺了。\n9點是生長激素黃金時間，能幫你長高、代謝好、不肥胖。\n熬夜會代謝差、變胖、長不高、身體差。");
-  return new Promise(r => {
-    clearBtn();
-    btn("1. 乖乖9點睡覺，長高高、不肥胖", async () => {
-      print("😊 超乖！早睡才能健康、長高、身材好！");
-      score++; await scene5();
-    });
-    btn("2. 賴著不睡、熬夜玩", async () => {
-      print("⚠️ 熬夜會長不高、代謝差變肥胖、沒精神、容易生病！");
-      await scene5();
-    });
-  });
-}
-
-async function scene5() {
-  print("🗣️ 長幼有序：長輩比較大，要尊重，不頂嘴、不亂發脾氣。");
-  return new Promise(r => {
-    clearBtn();
-    btn("1. 安靜聽，不插嘴、不頂嘴", async () => {
-      print("😊 這是有禮貌、尊重長輩。");
-      score++; await scene6();
-    });
-    btn("2. 聽一半就不耐煩", async () => {
-      print("😔 長輩是為你好，沒聽進去容易做錯事。");
-      await scene6();
-    });
-    btn("3. 頂嘴、跟長輩兇", async () => {
-      print("😔 頂嘴很沒禮貌，會讓家人難過。");
-      await scene6();
-    });
-  });
-}
-
-async function scene6() {
-  print("🌙 媽媽下班回家，一整天非常疲倦。");
-  return new Promise(r => {
-    clearBtn();
-    btn("1. 跟媽媽說：媽媽辛苦了", async () => {
-      print("🥰 媽媽很感動，辛苦都變得值得。");
-      score++; await ending();
-    });
-    btn("2. 不理媽媽，繼續玩", async () => {
-      print("😔 媽媽會覺得努力沒被看見，心裡難過。");
-      await ending();
-    });
-    btn("3. 要求媽媽馬上陪玩、買東西", async () => {
-      print("😔 媽媽已經很累，還要應付你，會超級辛苦。");
-      await ending();
-    });
-  });
-}
-
-async function ending() {
   clearBtn();
-  print("==============================================");
+  btn("1. 安靜乖乖的，讓媽媽順利出門", () => {
+    print("😊 媽媽很放心，開心去上班。");
+    score++;
+    scene2();
+  });
+  btn("2. 一直纏著媽媽，不讓她走", () => {
+    print("😔 媽媽已經很趕了，還要花時間哄你，會更累。");
+    scene2();
+  });
+  btn("3. 鬧脾氣，跟媽媽頂嘴", () => {
+    print("😔 頂嘴會讓媽媽很傷心，媽媽上班已經很辛苦。");
+    scene2();
+  });
+}
+
+// 2. 媽媽晚回家
+function scene2() {
+  print("📞 媽媽傳訊息：今天會晚一點回家。\n她工作很忙，沒有辦法一直跟你解釋。");
+  clearBtn();
+  btn("1. 乖乖等媽媽，相信媽媽", () => {
+    print("❤️ 你很體諒大人。\n大人有大人的事情要做，他們沒有義務每件事都跟你報備。");
+    score++;
+    scene3();
+  });
+  btn("2. 一直追問：你去哪？為什麼不講？", () => {
+    print("😔 媽媽已經很忙了，一直問只會讓她更有壓力。");
+    scene3();
+  });
+  btn("3. 生氣，覺得大人一定要跟你報備", () => {
+    print("😔 大人是照顧你的人，不是什麼都要向你報告的人。");
+    scene3();
+  });
+}
+
+// 3. 練好鋼琴
+function scene3() {
+  print("🎹 白天你在家，要把鋼琴練好，認真、專心、不偷懶。");
+  clearBtn();
+  btn("1. 認真練好鋼琴，做好自己的事", () => {
+    print("👍 自己的事情自己做好，不用大人一直操心。");
+    score++;
+    scene4();
+  });
+  btn("2. 偷懶不練琴，隨便亂彈敷衍", () => {
+    print("😔 敷衍練琴，琴藝不會進步，也浪費時間。");
+    scene4();
+  });
+  btn("3. 不想練，還要大人哄", () => {
+    print("😔 練琴是你自己的事情，沒有人有義務一直哄你。");
+    scene4();
+  });
+}
+
+// 4. 早睡、長高、代謝、不肥胖
+function scene4() {
+  print(`🌙 晚上該睡覺了。
+💡 小知識：
+晚上 9 點是生長激素分泌黃金時間，
+能幫你長高、分解脂肪、代謝好、不容易肥胖。
+熬夜會讓代謝變差、脂肪堆積，容易變胖、長不高、身體差。`);
+
+  clearBtn();
+  btn("1. 乖乖 9 點睡覺，長高高、不肥胖", () => {
+    print("😊 超乖！早睡才能健康、長高、身材好、精神好！");
+    score++;
+    scene5();
+  });
+  btn("2. 賴著不睡、熬夜玩", () => {
+    print("⚠️ 熬夜會：長不高、代謝差變肥胖、沒精神、容易生病！");
+    scene5();
+  });
+}
+
+// 5. 長輩說話
+function scene5() {
+  print("🗣️ 長幼有序：\n長輩比較大，要尊重他們，\n不頂嘴、不亂發脾氣、好好聽話。");
+  clearBtn();
+  btn("1. 安靜聽，不插嘴、不頂嘴", () => {
+    print("😊 這是有禮貌、尊重長輩的表現。");
+    score++;
+    scene6();
+  });
+  btn("2. 聽一半就不耐煩", () => {
+    print("😔 長輩是為你好，沒聽進去容易做錯事。");
+    scene6();
+  });
+  btn("3. 頂嘴、跟長輩兇", () => {
+    print("😔 頂嘴很沒禮貌，會讓家人難過、失望。");
+    scene6();
+  });
+}
+
+// 6. 媽媽回家
+function scene6() {
+  print("🌙 媽媽下班回家，一整天工作下來非常疲倦。");
+  clearBtn();
+  btn("1. 過去跟媽媽說：媽媽辛苦了", () => {
+    print("🥰 媽媽聽了很感動，所有辛苦都變得值得。");
+    score++;
+    ending();
+  });
+  btn("2. 不理媽媽，繼續玩自己的", () => {
+    print("😔 媽媽會覺得自己的努力沒有被看見，心裡難過。");
+    ending();
+  });
+  btn("3. 要求媽媽馬上陪玩、買東西", () => {
+    print("😔 媽媽已經很累，還要應付你，會超級辛苦。");
+    ending();
+  });
+}
+
+// 結局（三種 + 每個都加你指定的結語）
+function ending() {
+  clearBtn();
+  print("==================================================");
+
   if (score >= 5) {
-    print("🏆 完美好結局：超級懂事健康小天使\n家人愛你、照顧你，他們也會累、也會忙。\n你聽話、不頂嘴、早睡早起、認真練琴，\n長高高、代謝好不肥胖，家人超級驕傲！");
+    print("🏆 完美好結局：超級懂事健康好孩子");
+    print("你早睡早起、認真練琴、聽話、體諒家人，");
+    print("代謝好、長得高、不肥胖、健康又快樂！");
+    print(commonEnd);
+
   } else if (score >= 3) {
-    print("😐 普通結局：還可以更好\n你有時乖有時鬧脾氣，偶爾熬夜、練琴不夠認真，\n只要更聽話、早睡，就能更優秀、更健康！");
+    print("😐 普通結局：再努力一點會更棒");
+    print("你有時候乖、有時候鬧脾氣，有時候熬夜、有時候偷懶，");
+    print("這樣會影響身高、代謝，容易變胖、精神不好。");
+    print(commonEnd);
+    print("今後多聽話、早睡、不頂嘴，你一定會更優秀！");
+
   } else {
-    print("⚠️ 警惕結局：任性的下場\n你常常鬧脾氣、頂嘴、不聽話，讓媽媽又累又傷心。\n不練琴、天天熬夜，不只長不高，還會代謝差變肥胖，\n身體差、愛生病，自己也不開心。\n趕快改掉壞習慣，做健康懂事的好孩子！");
+    print("⚠️ 警惕結局：任性的壞下場");
+    print("你常常鬧脾氣、頂嘴、不聽話、熬夜玩樂，");
+    print("不只讓家人很累、很傷心，");
+    print("也會讓自己：長不高、代謝差變肥胖、身體差、容易生病。");
+    print(commonEnd);
+    print("趕快改掉壞習慣，做個健康又懂事的好孩子！");
   }
-  print("==============================================");
-  btn("再玩一次", start);
+
+  print("==================================================");
+  btn("重新玩一次", start);
 }
 
 start();
