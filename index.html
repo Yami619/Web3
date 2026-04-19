@@ -3,72 +3,48 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>溫馨小冒險：我是體貼懂事的好孩子</title>
+<title>西遊是一群喵｜文字冒險（加長完整版）</title>
 <style>
 body{
-  font-family: "Microsoft JhengHei", sans-serif;
-  background: #fff5f8;
-  padding: 20px;
-  font-size: 18px;
-  line-height: 1.6;
+  font-family:微軟正黑體, sans-serif;
+  background:#fef5f8; padding:20px; font-size:18px; line-height:1.65;
 }
 .main{
-  max-width: 520px;
-  margin: 0 auto;
-  background: #fff;
-  padding: 26px;
-  border-radius: 18px;
-  box-shadow: 0 0 12px rgba(0,0,0,0.1);
+  max-width:560px; margin:auto; background:#fff; padding:26px;
+  border-radius:18px; box-shadow:0 0 12px rgba(0,0,0,0.12);
 }
-.output{
-  white-space: pre-line;
-  margin-bottom: 20px;
-}
+.output{white-space:pre-line; margin-bottom:22px;}
 .btn{
-  width: 100%;
-  padding: 14px;
-  margin: 8px 0;
-  background: #f2a6c4;
-  color: #fff;
-  border: none;
-  border-radius: 12px;
-  font-size: 17px;
-  cursor: pointer;
+  width:100%; padding:14px; margin:8px 0;
+  background:#f2a6c4; color:#fff; border:none;
+  border-radius:12px; font-size:17px; cursor:pointer;
 }
-.btn:hover{
-  background: #e68fa8;
-}
+.btn:hover{background:#e68fa8;}
 </style>
 </head>
 <body>
 <div class="main">
-  <div class="output" id="output"></div>
-  <div id="buttons"></div>
+<div class="output" id="output"></div>
+<div id="buttons"></div>
 </div>
 
 <script>
-let output = document.getElementById("output");
-let buttons = document.getElementById("buttons");
-let score = 0;
+let out = document.getElementById("output");
+let btnArea = document.getElementById("buttons");
+let good = 0;
+let team = [];
 
-function print(txt) {
-  output.innerHTML += txt + "\n\n";
+function print(s){
+  out.innerHTML += s + "\n\n";
   window.scrollTo(0, document.body.scrollHeight);
 }
-
-function clearBtn() {
-  buttons.innerHTML = "";
-}
-
-function btn(text, func) {
+function clear(){ btnArea.innerHTML = ""; }
+function bt(txt, f){
   let b = document.createElement("button");
-  b.className = "btn";
-  b.innerText = text;
-  b.onclick = func;
-  buttons.appendChild(b);
+  b.className = "btn"; b.innerText = txt; b.onclick = f;
+  btnArea.appendChild(b);
 }
 
-// 你指定的「每個結局都要出現」的固定文字
 const commonEnd = `
 家人愛你，照顧你，給你吃、給你穿、陪你長大。
 但他們也是人，也會累、也會忙、也有壓力。
@@ -78,158 +54,220 @@ const commonEnd = `
 你只要乖乖的、懂事的，就是最棒的孩子！
 `;
 
-// 遊戲開頭
-function start() {
-  score = 0;
-  output.innerHTML = "";
-  print("🌟 溫馨小冒險：我是體貼懂事的好孩子 🌟");
-  scene1();
+function start(){
+  good = 0; team = []; clear(); out.innerHTML = "";
+  print("🐱 西遊是一群喵 · 文字冒險（加長完整版） 🐱");
+  print("大鬧天宮·五行山·高老莊·流沙河·三打白骨精·火焰山·女兒國·真假悟空·通天河全程冒險");
+  bt("開始冒險", story0);
 }
 
-// 1. 早上媽媽要上班
-function scene1() {
-  print("☀️ 一大早，媽媽就忙東忙西，要準備上班賺錢。\n她時間很趕，沒有辦法慢慢陪你聊天。");
-  clearBtn();
-  btn("1. 安靜乖乖的，讓媽媽順利出門", () => {
-    print("😊 媽媽很放心，開心去上班。");
-    score++;
-    scene2();
-  });
-  btn("2. 一直纏著媽媽，不讓她走", () => {
-    print("😔 媽媽已經很趕了，還要花時間哄你，會更累。");
-    scene2();
-  });
-  btn("3. 鬧脾氣，跟媽媽頂嘴", () => {
-    print("😔 頂嘴會讓媽媽很傷心，媽媽上班已經很辛苦。");
-    scene2();
-  });
+// ===== 第0章：大鬧天宮（回顧）=====
+function story0(){
+  clear();
+  print("📖 從前，有一隻頑皮的石頭貓，叫做悟空喵。");
+  print("他法力高強、驕傲任性，覺得自己最厲害，不聽長輩勸告。");
+  print("於是他鬧進天宮，打亂天庭秩序，到處闖禍惹事。");
+  print("長輩們一再勸他收斂脾氣，他卻頂嘴、不服從、態度兇猛。\n");
+  print("最後，如來喵出手，把他壓在五行山下，讓他靜心反省錯誤。");
+  
+  bt("繼續", story1);
 }
 
-// 2. 媽媽晚回家
-function scene2() {
-  print("📞 媽媽傳訊息：今天會晚一點回家。\n她工作很忙，沒有辦法一直跟你解釋。");
-  clearBtn();
-  btn("1. 乖乖等媽媽，相信媽媽", () => {
-    print("❤️ 你很體諒大人。\n大人有大人的事情要做，他們沒有義務每件事都跟你報備。");
-    score++;
-    scene3();
+// ===== 第1章：五行山救悟空喵 =====
+function story1(){
+  clear();
+  print("🐾 多年後，唐僧喵奉如來喵之命，要去西天取真經喵卷。");
+  print("他一路獨行，來到五行山腳下，聽見山下有貓在大聲呼喊：『救命～』");
+  
+  bt("1. 好心救悟空喵，教他以後要聽話、不任性", ()=>{
+    good++; team.push("悟空喵");
+    print("❤️ 你撕下符咒，救出悟空喵，他答應以後聽師父的話，護你取經。");
+    story2();
   });
-  btn("2. 一直追問：你去哪？為什麼不講？", () => {
-    print("😔 媽媽已經很忙了，一直問只會讓她更有壓力。");
-    scene3();
-  });
-  btn("3. 生氣，覺得大人一定要跟你報備", () => {
-    print("😔 大人是照顧你的人，不是什麼都要向你報告的人。");
-    scene3();
+  bt("2. 不理他，覺得他是壞貓，不值得幫", ()=>{
+    print("😔 悟空喵繼續被壓在山下，後來取經路上少了最強戰力。");
+    story2();
   });
 }
 
-// 3. 練好鋼琴
-function scene3() {
-  print("🎹 白天你在家，要把鋼琴練好，認真、專心、不偷懶。");
-  clearBtn();
-  btn("1. 認真練好鋼琴，做好自己的事", () => {
-    print("👍 自己的事情自己做好，不用大人一直操心。");
-    score++;
-    scene4();
+// ===== 第2章：高老莊收服八戒喵 =====
+function story2(){
+  clear();
+  print("🐷 你們來到熱鬧的高老莊，莊主說有隻胖胖的妖怪喵，愛偷吃、愛懶惰。");
+  print("但其實他本性純良，只是沒人約束，才養成壞習慣。");
+  
+  bt("1. 溫柔勸他加入隊伍，一起改過向善", ()=>{
+    good++; team.push("八戒喵");
+    print("😊 八戒喵被你的誠意打動，決心跟你取經，改掉偷懶搗蛋的壞毛病。");
+    story3();
   });
-  btn("2. 偷懶不練琴，隨便亂彈敷衍", () => {
-    print("😔 敷衍練琴，琴藝不會進步，也浪費時間。");
-    scene4();
-  });
-  btn("3. 不想練，還要大人哄", () => {
-    print("😔 練琴是你自己的事情，沒有人有義務一直哄你。");
-    scene4();
+  bt("2. 直接打跑他，覺得他只會添麻煩", ()=>{
+    print("😔 八戒喵逃走後，繼續在外面亂來，永遠沒機會改過自新。");
+    story3();
   });
 }
 
-// 4. 早睡、長高、代謝、不肥胖
-function scene4() {
-  print(`🌙 晚上該睡覺了。
-💡 小知識：
-晚上 9 點是生長激素分泌黃金時間，
-能幫你長高、分解脂肪、代謝好、不容易肥胖。
-熬夜會讓代謝變差、脂肪堆積，容易變胖、長不高、身體差。`);
-
-  clearBtn();
-  btn("1. 乖乖 9 點睡覺，長高高、不肥胖", () => {
-    print("😊 超乖！早睡才能健康、長高、身材好、精神好！");
-    score++;
-    scene5();
+// ===== 第3章：流沙河收服沙僧喵 =====
+function story3(){
+  clear();
+  print("💦 你們來到流沙河，河水洶湧湍急，無法渡河。");
+  print("河邊守著一隻老實的沙僧喵，他沉穩負責，只是膽子小、不敢主動靠近人。");
+  
+  bt("1. 主動打招呼，邀他一起保護大家", ()=>{
+    good++; team.push("沙僧喵");
+    print("🤝 沙僧喵開心加入隊伍，從此負責照顧大家、分擔旅途辛苦。");
+    story4();
   });
-  btn("2. 賴著不睡、熬夜玩", () => {
-    print("⚠️ 熬夜會：長不高、代謝差變肥胖、沒精神、容易生病！");
-    scene5();
+  bt("2. 嫌他膽小，不理他直接走", ()=>{
+    print("😔 沙僧喵孤單留在河邊，沒人陪伴，也無法獲得成長。");
+    story4();
   });
 }
 
-// 5. 長輩說話
-function scene5() {
-  print("🗣️ 長幼有序：\n長輩比較大，要尊重他們，\n不頂嘴、不亂發脾氣、好好聽話。");
-  clearBtn();
-  btn("1. 安靜聽，不插嘴、不頂嘴", () => {
-    print("😊 這是有禮貌、尊重長輩的表現。");
-    score++;
-    scene6();
+// ===== 第4章：三打白骨精喵 =====
+function story4(){
+  clear();
+  print("👻 前方進入詭異森林，陰風陣陣，白骨精喵在此出沒。");
+  print("她擅長偽裝成可愛小貓、慈祥老奶奶喵，專門欺騙過路僧人。");
+  print("悟空喵火眼金睛，一眼就看穿詭計，想立刻打跑妖怪。");
+  
+  bt("1. 相信悟空喵，一起對付妖怪，不亂懷疑徒弟", ()=>{
+    good++;
+    print("✅ 你們同心協力，徹底打敗白骨精喵，平安度過危機！");
+    story5();
   });
-  btn("2. 聽一半就不耐煩", () => {
-    print("😔 長輩是為你好，沒聽進去容易做錯事。");
-    scene6();
-  });
-  btn("3. 頂嘴、跟長輩兇", () => {
-    print("😔 頂嘴很沒禮貌，會讓家人難過、失望。");
-    scene6();
-  });
-}
-
-// 6. 媽媽回家
-function scene6() {
-  print("🌙 媽媽下班回家，一整天工作下來非常疲倦。");
-  clearBtn();
-  btn("1. 過去跟媽媽說：媽媽辛苦了", () => {
-    print("🥰 媽媽聽了很感動，所有辛苦都變得值得。");
-    score++;
-    ending();
-  });
-  btn("2. 不理媽媽，繼續玩自己的", () => {
-    print("😔 媽媽會覺得自己的努力沒有被看見，心裡難過。");
-    ending();
-  });
-  btn("3. 要求媽媽馬上陪玩、買東西", () => {
-    print("😔 媽媽已經很累，還要應付你，會超級辛苦。");
-    ending();
+  bt("2. 罵悟空喵亂打人、濫殺無辜，把他趕走", ()=>{
+    print("❌ 悟空喵傷心離去。沒多久，唐僧喵就被妖怪抓走，陷入致命危險。");
+    ending(false);
   });
 }
 
-// 結局（三種 + 每個都加你指定的結語）
-function ending() {
-  clearBtn();
-  print("==================================================");
+// ===== 第5章：火焰山 + 借芭蕉扇 =====
+function story5(){
+  clear();
+  print("🔥 前方來到火焰山，到處都是大火，無法前進。");
+  print("只有鐵扇公主喵的芭蕉扇，能撲滅大火。");
+  print("但鐵扇公主喵因為以前的誤會，很生氣，不願意借扇。");
+  
+  bt("1. 有禮貌、好好說話、道歉、耐心溝通", ()=>{
+    good++;
+    print("🌬️ 鐵扇公主喵被你誠意打動，借出芭蕉扇，順利滅火！");
+    story6();
+  });
+  bt("2. 生氣吵架、硬搶、態度兇狠", ()=>{
+    print("💢 鐵扇公主喵更生氣，扇子失效，大火永遠撲不滅。");
+    ending(false);
+  });
+}
 
-  if (score >= 5) {
-    print("🏆 完美好結局：超級懂事健康好孩子");
-    print("你早睡早起、認真練琴、聽話、體諒家人，");
-    print("代謝好、長得高、不肥胖、健康又快樂！");
+// ===== 第6章：女兒國 =====
+function story6(){
+  clear();
+  print("👑 你們來到美麗的女兒國，這裡全是貓咪居民，沒有男生。");
+  print("國王喵很喜歡你，想讓你留下來當國王，放棄取經。");
+  
+  bt("1. 禮貌拒絕，堅持取經的初心", ()=>{
+    good++;
+    print("❤️ 國王喵很欣賞你的堅定，送你許多補給，幫你繼續上路。");
+    story7();
+  });
+  bt("2. 貪圖享樂，答應留下", ()=>{
+    print("😔 你放棄了取經，雖然當了國王，卻再也無法完成使命。");
+    ending(false);
+  });
+}
+
+// ===== 第7章：真假悟空喵 =====
+function story7(){
+  clear();
+  print("🐒 前方出現兩隻一模一樣的悟空喵，吵得不可開交。");
+  print("一只是真的悟空喵，一只是假的六耳獼猴喵。");
+  print("你需要判斷誰才是你的徒弟。");
+  
+  bt("1. 相信了解你的那隻悟空喵", ()=>{
+    good++;
+    print("✅ 你成功分辨真假，打敗了六耳獼猴喵，悟空喵也更信任你了。");
+    story8();
+  });
+  bt("2. 懷疑真悟空，偏向假悟空", ()=>{
+    print("❌ 你認錯了徒弟，被假悟空喵騙走，隊伍陷入混亂。");
+    ending(false);
+  });
+}
+
+// ===== 第8章：通天河 =====
+function story8(){
+  clear();
+  print("🌊 你們來到通天河，河水湍急，無法渡過。");
+  print("河神喵說：只要你們不亂丟垃圾、尊重自然，他就會幫你們過河。");
+  
+  bt("1. 答應河神，全程愛護環境", ()=>{
+    good++;
+    print("✅ 河神喵很滿意，施法讓河水結冰，你們安全渡過。");
+    story9();
+  });
+  bt("2. 不理會河神，亂丟垃圾", ()=>{
+    print("💢 河神喵生氣，河水暴漲，把你們沖回原地。");
+    ending(false);
+  });
+}
+
+// ===== 第9章：到達雷音寺 =====
+function story9(){
+  clear();
+  print("🏯 你們終於來到西天大雷音寺！");
+  print(`你的隊友：${team.join("、")}`);
+  print("如來喵看著你一路的表現，給你對應的最終結局。");
+  
+  bt("查看最終結局", ()=>{
+    ending(true);
+  });
+}
+
+// ===== 五種細分結局 =====
+function ending(win){
+  clear();
+  print("==============================================");
+  if(good >= 5){
+    // 1. 超完美聖僧結局
+    print("🏆【超完美結局：聖僧喵取經歸來】");
+    print("你全程聽話懂事、信任徒弟、禮貌待人、團結夥伴，");
+    print("收服所有隊友，化解所有危機，憑藉智慧與善心完成取經。");
+    print("如來喵封你為聖僧，所有貓咪都敬仰你、喜歡你，");
+    print("你不僅圓滿完成任務，更成為最懂事的小模範！");
     print(commonEnd);
-
-  } else if (score >= 3) {
-    print("😐 普通結局：再努力一點會更棒");
-    print("你有時候乖、有時候鬧脾氣，有時候熬夜、有時候偷懶，");
-    print("這樣會影響身高、代謝，容易變胖、精神不好。");
+  }else if(good == 4){
+    // 2. 完美取經結局
+    print("🥇【完美結局：圓滿取經小英雄】");
+    print("你表現十分優秀，大多時候都能做到體諒他人、聽話懂事，");
+    print("順利收服隊友、戰勝妖怪，成功取得真經喵卷，");
+    print("家人和夥伴都為你感到驕傲，是超棒的好孩子！");
     print(commonEnd);
-    print("今後多聽話、早睡、不頂嘴，你一定會更優秀！");
-
-  } else {
-    print("⚠️ 警惕結局：任性的壞下場");
-    print("你常常鬧脾氣、頂嘴、不聽話、熬夜玩樂，");
-    print("不只讓家人很累、很傷心，");
-    print("也會讓自己：長不高、代謝差變肥胖、身體差、容易生病。");
+  }else if(good == 2 || good == 3){
+    // 3. 普通遺憾結局
+    print("😐【普通結局：取經半途有成長】");
+    print("你有時候聽話懂事，有時候鬧小脾氣、任性固執，");
+    print("雖然走到西天，但錯過了收服夥伴的機會，也歷經波折，");
+    print("只取得殘缺真經，今後學會多聽勸、多體諒，會變得更優秀！");
     print(commonEnd);
-    print("趕快改掉壞習慣，做個健康又懂事的好孩子！");
+  }else if(good == 1){
+    // 4. 失敗遺憾結局
+    print("⚠️【遺憾結局：取經失敗】");
+    print("你常常任性發脾氣、不信任身邊人、不懂尊重他人，");
+    print("導致隊友離散、危機四伏，最終沒能取得真經，");
+    print("旅途充滿遺憾，要記住任性只會讓自己和他人受傷！");
+    print(commonEnd);
+  }else{
+    // 5. 最差警惕結局
+    print("❌【最差結局：迷途難返】");
+    print("你全程任性妄為、不聽勸告、頂嘴吵架、對人兇狠，");
+    print("不僅沒有任何隊友，還處處得罪他人，被妖怪欺負、被大火阻擋，");
+    print("永遠困在西天路上，無法回家，讓家人擔心失望。");
+    print("一定要改掉壞脾氣，學會聽話、尊重、體諒，才能重新踏上正途！");
+    print(commonEnd);
   }
-
-  print("==================================================");
-  btn("重新玩一次", start);
+  print("==============================================");
+  bt("再玩一次挑戰更好結局", start);
 }
 
 start();
